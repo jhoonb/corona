@@ -1,4 +1,21 @@
-<!DOCTYPE html>
+"""
+HTML_INDEX_PAGE: str
+uso:
+
+Death Rate
+Death Rate Brazil
+Cases World
+World Deaths
+Cases Brazil
+Deaths Brazil
+Last updated
+
+HTML_INDEX_PAGE.format(Death Rate, Death Rate Brazil, 
+    Cases World, World Deaths, Cases Brazil, Deaths Brazil, Last updated)
+"""
+
+
+HTML_INDEX_PAGE = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -14,24 +31,24 @@
         <div class="section-1">
             <h1> Global Death Rate for COVID-19 </h1>
             <h4>(Taxa de mortalidade global do Coronavírus)</h4>
-            <i class="fas fa-skull-crossbones fa-5x white"> 4.09% </i>
+            <i class="fas fa-skull-crossbones fa-5x white"> {}% </i>
             <br> <br>
 
             <h1> Brazil Death Rate for COVID-19 </h1>
             <h4>(Taxa de mortalidade do Coronavírus no Brasil)</h4>
-            <i class="fas fa-skull-crossbones fa-5x white"> 1.08% </i>
+            <i class="fas fa-skull-crossbones fa-5x white"> {}% </i>
         </div>
         <div class="section-2">
             <h2>World (Mundo)</h2>
-            <h3>Coronavirus Cases: 245652</h3>
-            <h3>Deaths: 10050</h3>
+            <h3>Coronavirus Cases: {}</h3>
+            <h3>Deaths: {}</h3>
 
             <h2>Brazil (Brasil)</h2>
-            <h3>Coronavirus Cases: 647</h3>
-            <h3>Deaths: 7</h3>
+            <h3>Coronavirus Cases: {}</h3>
+            <h3>Deaths: {}</h3>
         </div>
 
-        <h5>Last updated (última atualização em): Thu Mar 19 23:14:32 2020</h5>
+        <h5>Last updated (última atualização em): {}</h5>
 
         <div class="wrapper">
             <footer class="page-footer">
@@ -51,4 +68,4 @@
         </div>
     </div>
 </body>
-</html>
+</html>'''
