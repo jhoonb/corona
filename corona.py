@@ -1,3 +1,4 @@
+import sys
 import str_index
 import time
 import urllib.request
@@ -64,9 +65,15 @@ def get_data():
     world_death_rate = round(world_death_rate, 2)
     brazil_death_rate = round(brazil_death_rate, 2)
 
-    print(f"casos mundo: {covid19_world_cases} | mortos mundo: {deaths_world_number}")
-    print(f"casos brasil: {brazil_covid19_cases} | mortos br: {brazil_deaths_number}")
-    print(f'mundo: {world_death_rate}% | brazil: {brazil_death_rate}%')
+    print("\n####################################")
+    print(f"- Casos no mundo: {covid19_world_cases}")
+    print(f"- Número de mortos no Mundo: {deaths_world_number}")
+    print(f"- Casos no Brasil: {brazil_covid19_cases}")
+    print(f"- Número de Mortos no Brasil: {brazil_deaths_number}")
+    print("-"*20)
+    print(f"- Taxa de Mortalidade(Mundo): {world_death_rate}%")
+    print(f"- Taxa de Mortalidade(Brasil): {brazil_death_rate}%")
+    print("\n####################################\n")
 
     return (world_death_rate, 
     brazil_death_rate, 
@@ -80,6 +87,7 @@ def gen_page_html():
 
     data = get_data()
     localtime = time.asctime(time.localtime(time.time()))
+
     index = str_index.HTML_INDEX_PAGE.format(data[0], 
     data[1], 
     data[2],
@@ -93,4 +101,19 @@ def gen_page_html():
 
 
 if __name__ == '__main__':
-    gen_page_html()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == 'monitor':
+            print("Press Control + Z to exit...")
+            cont_tempo = 0
+            cont_max = 60 * 60
+            while True:
+                tmp = time.asctime(time.localtime(time.time()))
+                print(tmp, end="\r")
+                if cont_tempo % cont_max == 0:
+                    gen_page_html()
+                    cont_tempo = 0
+
+                time.sleep(10) # 10 segs
+                cont_tempo += 10
+    else: 
+        gen_page_html()
