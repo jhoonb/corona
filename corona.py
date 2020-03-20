@@ -2,6 +2,8 @@ import sys
 import str_index
 import time
 import urllib.request
+import datetime
+
 
 def _toint(n):
     n = n.replace(",", "")
@@ -10,6 +12,19 @@ def _toint(n):
     except:
         raise Exception("fail to convert str to int")
     return n
+
+
+def _convert2date(ds):
+    fmt =  '%m-%d-%Y'
+    return datetime.datetime.strptime(ds, fmt)
+
+
+def sort_csv_file():
+    pass
+
+
+def get_brazil_data():
+    pass
 
 
 def get_data():
