@@ -31,24 +31,24 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
         <div class="section-1">
             <h1> Taxa de mortalidade global do Coronavírus </h1>
             <h4>(Global Death Rate for COVID-19)</h4>
-            <i class="fas fa-skull-crossbones fa-5x white"> 4.17% </i>
+            <i class="fas fa-skull-crossbones fa-5x white"> {}% </i>
             <br> <br>
 
             <h1> Taxa de mortalidade do Coronavírus no Brasil </h1>
             <h4>(Brazil Death Rate for COVID-19)</h4>
-            <i class="fas fa-skull-crossbones fa-5x white"> 1.07% </i>
+            <i class="fas fa-skull-crossbones fa-5x white"> {}% </i>
         </div>
         <div class="section-2">
             <h2>Mundo (World)</h2>
-            <h3>Casos de Coronavirus (COVID-19 Cases): {}</h3>
-            <h3>Mortes (Deaths): {}</h3>
+            <h3>Casos de Coronavirus (COVID-19 Cases): {} </h3>
+            <h3>Mortes (Deaths): {} </h3>
 
             <h2>Brasil (Brazil)</h2>
-            <h3>Casos de Coronavirus (COVID-19 Cases): {}</h3>
-            <h3>Mortes (Deaths): {}</h3>
+            <h3>Casos de Coronavirus (COVID-19 Cases): {} </h3>
+            <h3>Mortes (Deaths): {} </h3>
         </div>
 
-        <h5>Última atualização em (Last updated): {}</h5>
+        <h5>Última atualização em (Last updated): {} </h5>
 
         <div class="wrapper">
             <footer class="page-footer">
