@@ -1,8 +1,9 @@
 import sys
-import str_index
 import time
 import urllib.request
 import datetime
+
+from str_index import HTML_INDEX_PAGE
 
 
 def _toint(n):
@@ -12,6 +13,112 @@ def _toint(n):
     except:
         raise Exception("fail to convert str to int")
     return n
+
+
+CR = {
+    'red': '\u001b[31m',
+    'green': '\u001b[32m',
+    'reset': '\u001b[0m',
+    'yellow': '\u001b[33m',
+    'cyan': '\u001b[36m'
+}
+
+
+class CoronaData:
+
+    def __init__(self):
+        self.world_cases = 0
+        self.world_deaths = 0
+        self.brazil_cases = 0
+        self.brazil_deaths = 0
+        self.world_death_rate = 0.0
+        self.brazil_death_rate = 0.0
+
+    
+    def _rates(self):
+        wdr = (self.world_deaths * 100) / self.world_cases
+        bdr = (self.brazil_deaths * 100) / self.brazil_cases
+        self.world_death_rate = round(wdr, 2)
+        self.brazil_death_rate = round(bdr, 2)
+
+
+    def load(self):
+        link = "https://www.worldometers.info/coronavirus/"
+        with urllib.request.urlopen(link) as response:
+            html = response.read().decode("utf-8")
+        
+        # get Coronavirus Cases
+        index_begin = html.find('#aaa">') + 6   
+        # cut html     
+        html = html[index_begin:]
+        index_end = html.find('</span>')
+        world_cases = html[:index_end].strip()
+
+        # cut html
+        html = html[index_end:]
+        # get Deaths Number
+        index_begin = html.find('<span>') + 6
+        # cut html     
+        html = html[index_begin:]
+        index_end = html.find('</span>')
+        world_deaths = html[:index_end].strip()
+
+        # get brazil 
+        # cut html
+        html = html[index_end:]
+        index_end = html.find('Brazil') + 11
+        # cut html
+        html = html[index_end:]
+        # get brazil cases
+        index_begin = html.find('">') + 2
+        # cut html
+        html = html[index_begin:]
+        index_end = html.find('</td>')
+        brazil_cases = html[:index_end].strip()
+
+        # cut html
+        html = html[index_end:]
+        index_begin = html.find('">') + 2
+        html = html[index_begin:]
+        index_begin = html.find('">') + 2
+        html = html[index_begin:]
+        index_end = html.find('</td>')
+        brazil_deaths = html[:index_end].strip()
+
+        self.world_cases = _toint(world_cases)
+        self.world_deaths = _toint(world_deaths)
+        self.brazil_cases = _toint(brazil_cases)
+        self.brazil_deaths = _toint(brazil_deaths)
+        # rate
+        self._rates()
+
+
+    def create_page_index(self):
+        localtime = time.asctime(time.localtime(time.time()))
+        index = HTML_INDEX_PAGE.format(
+            self.world_death_rate,
+            self.brazil_death_rate,
+            self.world_cases,
+            self.world_deaths, 
+            self.brazil_cases,
+            self.brazil_deaths,
+            localtime)
+
+        with open('index.html', 'w') as file:
+            file.write(index)
+
+
+    def monitor(self):
+        print("")
+        print("-" * 10, f" {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']}", "-" * 10)
+        print(f"- Casos no mundo: {CR['red']}{self.world_cases}{CR['reset']}")
+        print(f"- Número de mortos no Mundo: {CR['red']}{self.world_deaths}{CR['reset']}")
+        print(f"- Casos no Brasil: {CR['red']}{self.brazil_cases}{CR['reset']}")
+        print(f"- Número de Mortos no Brasil: {CR['red']}{self.brazil_deaths}{CR['reset']}")
+        print("-"*20)
+        print(f"- Taxa de Mortalidade(Mundo): {CR['red']}{self.world_death_rate}%{CR['reset']}")
+        print(f"- Taxa de Mortalidade(Brasil): {CR['red']}{self.brazil_death_rate}%{CR['reset']}")
+        print("-" * 40)
 
 
 def _convert2date(ds):
@@ -27,108 +134,36 @@ def get_brazil_data():
     pass
 
 
-def get_data():
+"""
+# execute one time
+python3 corona.py 
 
-    link = "https://www.worldometers.info/coronavirus/"
-    with urllib.request.urlopen(link) as response:
-        html = response.read().decode("utf-8")
-    # get Coronavirus Cases
-    index_begin = html.find('#aaa">') + 6   
-    # cut html     
-    html = html[index_begin:]
-    index_end = html.find('</span>')
-    covid19_world_cases = html[:index_end].strip()
+or
+# execute in loop, step time in seconds
+# 3600 seconds = 1 hour
+python3 corona.py monitor 3600
 
-    # cut html
-    html = html[index_end:]
-    # get Deaths Number
-    index_begin = html.find('<span>') + 6
-    # cut html     
-    html = html[index_begin:]
-    index_end = html.find('</span>')
-    deaths_world_number = html[:index_end].strip()
-
-    # get brazil 
-    # cut html
-    html = html[index_end:]
-    index_end = html.find('Brazil') + 11
-    # cut html
-    html = html[index_end:]
-    # get brazil cases
-    index_begin = html.find('">') + 2
-    # cut html
-    html = html[index_begin:]
-    index_end = html.find('</td>')
-    brazil_covid19_cases = html[:index_end].strip()
-
-    # cut html
-    html = html[index_end:]
-    index_begin = html.find('">') + 2
-    html = html[index_begin:]
-    index_begin = html.find('">') + 2
-    html = html[index_begin:]
-    index_end = html.find('</td>')
-    brazil_deaths_number = html[:index_end].strip()
-
-    covid19_world_cases = _toint(covid19_world_cases)
-    deaths_world_number = _toint(deaths_world_number)
-    brazil_covid19_cases = _toint(brazil_covid19_cases)
-    brazil_deaths_number = _toint(brazil_deaths_number)
-
-    world_death_rate = (deaths_world_number * 100) / covid19_world_cases
-    brazil_death_rate = (brazil_deaths_number * 100) / brazil_covid19_cases
-    world_death_rate = round(world_death_rate, 2)
-    brazil_death_rate = round(brazil_death_rate, 2)
-
-    print("\n####################################")
-    print(f"- Casos no mundo: {covid19_world_cases}")
-    print(f"- Número de mortos no Mundo: {deaths_world_number}")
-    print(f"- Casos no Brasil: {brazil_covid19_cases}")
-    print(f"- Número de Mortos no Brasil: {brazil_deaths_number}")
-    print("-"*20)
-    print(f"- Taxa de Mortalidade(Mundo): {world_death_rate}%")
-    print(f"- Taxa de Mortalidade(Brasil): {brazil_death_rate}%")
-    print("\n####################################\n")
-
-    return (world_death_rate, 
-    brazil_death_rate, 
-    covid19_world_cases, 
-    deaths_world_number, 
-    brazil_covid19_cases, 
-    brazil_deaths_number) 
-
-
-def gen_page_html():
-
-    data = get_data()
-    localtime = time.asctime(time.localtime(time.time()))
-
-    index = str_index.HTML_INDEX_PAGE.format(data[0], 
-    data[1], 
-    data[2],
-    data[3],
-    data[4],
-    data[5], 
-    localtime)
-    
-    with open('index.html', 'w') as file:
-        file.write(index)
-
+"""
 
 if __name__ == '__main__':
-    if len(sys.argv) > 1:
+    corona = CoronaData()
+    if len(sys.argv) == 3:
         if sys.argv[1] == 'monitor':
             print("Press Control + Z to exit...")
             cont_tempo = 0
-            cont_max = 60 * 60
+            # seconds
+            cont_max = int(sys.argv[2])
             while True:
                 tmp = time.asctime(time.localtime(time.time()))
-                print(tmp, end="\r")
+                print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}', end="\r")
                 if cont_tempo % cont_max == 0:
-                    gen_page_html()
+                    corona.load()
+                    corona.monitor()
+                    corona.create_page_index()
                     cont_tempo = 0
 
                 time.sleep(10) # 10 segs
                 cont_tempo += 10
-    else: 
-        gen_page_html()
+    else:
+        corona.load()
+        corona.create_page_index()
