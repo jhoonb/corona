@@ -157,7 +157,7 @@ if __name__ == '__main__':
             cont_max = int(sys.argv[2])
             while True:
                 tmp = time.asctime(time.localtime(time.time()))
-                print("Press Control + Z to exit...")
+                print("Press Control + Z to exit...", end="\r")
                 print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}', end="\r")
                 if cont_tempo % cont_max == 0:
                     corona.load()
@@ -166,8 +166,7 @@ if __name__ == '__main__':
                     cont_tempo = 0
 
                 time.sleep(10) # 10 segs
-                cont_tempo += 2
-                os.system('clear')
+                cont_tempo += 10
     else:
         corona.load()
         corona.monitor()
