@@ -40,12 +40,12 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
         </div>
         <div class="section-2">
             <h2>Mundo (World)</h2>
-            <h3>Casos de Coronavirus (COVID-19 Cases): {} </h3>
-            <h3>Mortes (Deaths): {} </h3>
+            <h3>Casos de Coronavirus (COVID-19 Cases): <div class="numero"> {} </div> </h3>
+            <h3>Mortes (Deaths): <div class="numero"> {} </div>  </h3>
 
             <h2>Brasil (Brazil)</h2>
-            <h3>Casos de Coronavirus (COVID-19 Cases): {} </h3>
-            <h3>Mortes (Deaths): {} </h3>
+            <h3>Casos de Coronavirus (COVID-19 Cases): <div class="numero"> {} </div>  </h3>
+            <h3>Mortes (Deaths): <div class="numero"> {} </div>  </h3>
         </div>
 
         <h5>Última atualização em (Last updated): {} </h5>

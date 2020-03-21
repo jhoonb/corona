@@ -1,7 +1,7 @@
 COVID-19: Death Rate - (Taxa de Mortalidade do Coronavírus)
 ==
 
-Página web: jhoonb.github.io/corona
+Página web: [corona](https://jhoonb.github.io/corona/) 
 ===
 
 Uso
@@ -14,8 +14,8 @@ Linha de comando:
 python3 corona.py
 ```
 
-- Monitor do CODIV-19 no terminal
-- Faz consulta a cada `<numero>` segundos e gera a página index.html
+- Monitor do COVID-19 no terminal
+- Faz consulta a cada `<numero>` segundos e gera a página `index.html`
 ```bash
 python3 corona.py monitor <numero>
 ```
