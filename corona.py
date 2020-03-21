@@ -3,11 +3,12 @@ import sys
 import time
 import urllib.request
 import datetime
+import pathlib
 
 from str_index import HTML_INDEX_PAGE
 
 
-def _toint(n):
+def _toint(n: str) -> int:
     n = n.replace(",", "")
     try:
         n = int(n)
@@ -16,6 +17,26 @@ def _toint(n):
     return n
 
 
+def _str2date(ds):
+    fmt =  '%m-%d-%Y'
+    return datetime.datetime.strptime(ds, fmt)
+
+
+def sort_csv_file():
+    pass
+
+
+def brazil_data():
+
+    _path_ = pathlib.Path().absolute() / 'data'
+    p = pathlib.Path(_path_)
+    # ordena por data
+    files = sorted((_str2date(i.name.split(".")[0]) for i in p.iterdir() if i.is_file()))
+
+
+
+
+# console color
 CR = {
     'red': '\u001b[31m',
     'green': '\u001b[32m',
@@ -94,7 +115,7 @@ class CoronaData:
         self._rates()
 
 
-    def create_page_index(self):
+    def index(self):
         localtime = time.asctime(time.localtime(time.time()))
         index = HTML_INDEX_PAGE.format(
             self.world_death_rate,
@@ -124,19 +145,6 @@ class CoronaData:
 """)
 
 
-def _convert2date(ds):
-    fmt =  '%m-%d-%Y'
-    return datetime.datetime.strptime(ds, fmt)
-
-
-def sort_csv_file():
-    pass
-
-
-def get_brazil_data():
-    pass
-
-
 """
 # execute one time
 python3 corona.py 
@@ -162,7 +170,7 @@ if __name__ == '__main__':
                 if cont_tempo % cont_max == 0:
                     corona.load()
                     corona.monitor()
-                    corona.create_page_index()
+                    corona.index()
                     cont_tempo = 0
 
                 time.sleep(10) # 10 segs
@@ -170,4 +178,4 @@ if __name__ == '__main__':
     else:
         corona.load()
         corona.monitor()
-        corona.create_page_index()
+        corona.index()
