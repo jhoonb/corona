@@ -1,3 +1,4 @@
+import os
 import sys
 import time
 import urllib.request
@@ -109,16 +110,18 @@ class CoronaData:
 
 
     def monitor(self):
-        print("")
-        print("-" * 10, f" {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']}", "-" * 10)
-        print(f"- Casos no mundo: {CR['red']}{self.world_cases}{CR['reset']}")
-        print(f"- Número de mortos no Mundo: {CR['red']}{self.world_deaths}{CR['reset']}")
-        print(f"- Casos no Brasil: {CR['red']}{self.brazil_cases}{CR['reset']}")
-        print(f"- Número de Mortos no Brasil: {CR['red']}{self.brazil_deaths}{CR['reset']}")
-        print("-"*20)
-        print(f"- Taxa de Mortalidade(Mundo): {CR['red']}{self.world_death_rate}%{CR['reset']}")
-        print(f"- Taxa de Mortalidade(Brasil): {CR['red']}{self.brazil_death_rate}%{CR['reset']}")
-        print("-" * 40)
+        print(f"""
+
+-------- {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']} --------
+- Casos no mundo:              {CR['red']}{self.world_cases}{CR['reset']}
+- Número de mortos no Mundo:   {CR['red']}{self.world_deaths}{CR['reset']}
+- Casos no Brasil:             {CR['red']}{self.brazil_cases}{CR['reset']}
+- Número de Mortos no Brasil:  {CR['red']}{self.brazil_deaths}{CR['reset']}
+
+- Taxa de Mortalidade(Mundo):  {CR['red']}{self.world_death_rate}%{CR['reset']}
+- Taxa de Mortalidade(Brasil): {CR['red']}{self.brazil_death_rate}%{CR['reset']}
+
+""")
 
 
 def _convert2date(ds):
@@ -149,12 +152,12 @@ if __name__ == '__main__':
     corona = CoronaData()
     if len(sys.argv) == 3:
         if sys.argv[1] == 'monitor':
-            print("Press Control + Z to exit...")
             cont_tempo = 0
             # seconds
             cont_max = int(sys.argv[2])
             while True:
                 tmp = time.asctime(time.localtime(time.time()))
+                print("Press Control + Z to exit...")
                 print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}', end="\r")
                 if cont_tempo % cont_max == 0:
                     corona.load()
@@ -163,7 +166,9 @@ if __name__ == '__main__':
                     cont_tempo = 0
 
                 time.sleep(10) # 10 segs
-                cont_tempo += 10
+                cont_tempo += 2
+                os.system('clear')
     else:
         corona.load()
+        corona.monitor()
         corona.create_page_index()

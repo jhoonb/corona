@@ -21,7 +21,7 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <script src="https://kit.fontawesome.com/a80232805f.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
     <title>COVID-19 | World & Brazil</title>
 </head>
@@ -64,6 +64,10 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
             <a href="https://medium.com/@jhoonb"> <i class="fab fa-medium"></i></a>
 
             <a href="https://dev.to/jhoonb"> <i class="fab fa-dev"></i></a>
+            <br>
+            <i class="fas fa-code"></i>
+            <a href="https://github.com/jhoonb/corona" class="btn btn-default">Source Code</a>
+            <i class="fas fa-code"></i>
         </footer>
         </div>
     </div>
