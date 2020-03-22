@@ -95,7 +95,7 @@ def brazil_data() -> List[Dict]:
 #         arq.write(x)
 
 
-# console color
+# console color [LINUX]
 CR = {
     'red': '\u001b[31m',
     'green': '\u001b[32m',
@@ -145,6 +145,7 @@ class CoronaData:
         self.world_recovered = self._bingdata['totalRecovered']
         # find brazil
         for index, j in enumerate(self._bingdata['areas']):
+            # [TODO] change 'brazil' for your country
             if j['id'] == 'brazil':
                 self.brazil_cases = self._bingdata['areas'][index]['totalConfirmed']
                 self.brazil_deaths = self._bingdata['areas'][index]['totalDeaths']
@@ -171,8 +172,11 @@ class CoronaData:
 
     def monitor(self):
         """
-        wtf
+        Linux console monitor
         """
+        if sys.platform != 'linux':
+            self._monitor_win()
+
         data_hora = datetime.datetime.now()
         data_hora = data_hora.strftime('%d/%m/%Y %H:%M')
         print(
@@ -192,6 +196,32 @@ class CoronaData:
             f"\n- {'MORTALIDADE (Brasil):'}{CR['red']}{self.brazil_death_rate:>8}%{CR['reset']}",
             f"\n- {'RECUPERADOS (Mundo):'}{CR['green']}{self.world_recovered_rate:>9}%{CR['reset']}",
             f"\n- {'RECUPERADOS (Brasil):'}{CR['green']}{self.brazil_recovered_rate:>8}%{CR['reset']}")
+
+    
+    def _monitor_win(self):
+        """
+        Windows console monitor
+        """
+        data_hora = datetime.datetime.now()
+        data_hora = data_hora.strftime('%d/%m/%Y %H:%M')
+        print(
+            f" -------- CORONAVIRUS COVID-19 --------",
+            f"\n{'jhoonb.github.io/corona':^40}",
+            f"\natualizado em: {data_hora:^25}",
+            f"\n{'NÚMEROS NO MUNDO':^40}",
+            f"\n- {'CASOS:':<15}{self.world_cases:>15}",
+            f"\n- {'MORTES:':<15}{self.world_deaths:>15}",
+            f"\n- {'RECUPERADOS:':<15}{self.world_recovered:>15}",
+            f"\n{'NÚMEROS NO BRASIL':^40}",
+            f"\n- {'CASOS:':<15}{self.brazil_cases:>15}",
+            f"\n- {'MORTES:':<15}{self.brazil_deaths:>15}",
+            f"\n- {'RECUPERADOS:':<15}{self.brazil_recovered:>15}",
+            f"\n{'TAXAS':^40}",
+            f"\n- {'MORTALIDADE (Mundo):'}{self.world_death_rate:>9}%",
+            f"\n- {'MORTALIDADE (Brasil):'}{self.brazil_death_rate:>8}%",
+            f"\n- {'RECUPERADOS (Mundo):'}{self.world_recovered_rate:>9}%",
+            f"\n- {'RECUPERADOS (Brasil):'}{self.brazil_recovered_rate:>8}%")
+
 
 
 """
