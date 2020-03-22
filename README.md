@@ -41,7 +41,7 @@ from corona import CoronaData
 corona = CoronaData()
 
 ## métodos
-# scraping da pagina
+# dados json do bing
 corona.load()
 # gera index.html
 corona.index()
@@ -77,7 +77,7 @@ corona.brazil_recovered_rate
 Fonte de dados
 ===
 
-- Microsoft Bing: [bing.com/covid](bing.com/covid) 
+- Microsoft Bing: [bing-covid](https://bing.com/covid) 
 
 - Modelo baseado da página index.html: [minimalist-portfolio](https://github.com/giotsere/minimalist-portfolio)
 

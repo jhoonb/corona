@@ -175,12 +175,12 @@ class CoronaData:
         Linux console monitor
         """
         if sys.platform != 'linux':
-            self._monitor_win()
+            return self._monitor_win()
 
         data_hora = datetime.datetime.now()
         data_hora = data_hora.strftime('%d/%m/%Y %H:%M')
         print(
-            f" -------- {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']} --------",
+            f"\n -------- {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']} --------",
             f"\n{CR['bblue']}{'jhoonb.github.io/corona':^40}{CR['reset']}",
             f"\n{CR['bgrey']}atualizado em: {data_hora:^25}{CR['reset']}",
             f"\n{'NÚMEROS NO MUNDO':^40}",
@@ -205,7 +205,7 @@ class CoronaData:
         data_hora = datetime.datetime.now()
         data_hora = data_hora.strftime('%d/%m/%Y %H:%M')
         print(
-            f" -------- CORONAVIRUS COVID-19 --------",
+            f"\n -------- CORONAVIRUS COVID-19 --------",
             f"\n{'jhoonb.github.io/corona':^40}",
             f"\natualizado em: {data_hora:^25}",
             f"\n{'NÚMEROS NO MUNDO':^40}",
@@ -245,7 +245,7 @@ if __name__ == '__main__':
             while True:
                 tmp = time.asctime(time.localtime(time.time()))
                 print("Press Control + Z to exit...", end="\r")
-                print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}\n', end="\r")
+                print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}', end="\r")
                 if cont_tempo % cont_max == 0:
                     corona.load()
                     corona.monitor()
