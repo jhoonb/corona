@@ -44,7 +44,7 @@ corona = CoronaData()
 # scraping da pagina
 corona.load()
 # gera index.html
-corona.create_page_index()
+corona.index()
 # monitora via terminal 
 corona.monitor()
 
@@ -57,10 +57,19 @@ corona.brazil_deaths
 corona.world_cases
 # número de casos no Brazil (int)
 corona.brazil_cases
+# número de recuperados no mundo (int)
+corona.world_recovered
+# número de recuperados no Brasil (int)
+corona.brazil_recovered 
 # taxa de mortalidade no mundo (float)
 corona.world_death_rate
 # taxa de mortalidade no Brasil (float)
 corona.brazil_death_rate
+# taxa de recuperados no mundo (float)
+corona.world_recovered_rate 
+# taxa de recuperados no Brasil (float)
+corona.brazil_recovered_rate
+
 
 ```
 
@@ -68,7 +77,7 @@ corona.brazil_death_rate
 Fonte de dados
 ===
 
-- Scraping da página: [worldmeters](https://www.worldometers.info/coronavirus/) 
+- Microsoft Bing: [bing.com/covid](bing.com/covid) 
 
 - Modelo baseado da página index.html: [minimalist-portfolio](https://github.com/giotsere/minimalist-portfolio)
 

@@ -1,10 +1,11 @@
-import os
 import sys
 import time
 import urllib.request
 import datetime
 import pathlib
+import json
 
+from typing import List, Dict
 from str_index import HTML_INDEX_PAGE
 
 
@@ -17,23 +18,81 @@ def _toint(n: str) -> int:
     return n
 
 
-def _str2date(ds):
+def _str2date(ds: str) -> datetime.datetime:
     fmt =  '%m-%d-%Y'
     return datetime.datetime.strptime(ds, fmt)
 
 
-def sort_csv_file():
-    pass
+def _date2str(dt: datetime.datetime) -> str:
+    return dt.strftime("%m-%d-%Y")
 
 
-def brazil_data():
+def csv_line(line: str) -> str:
+    """
+    format 
+    key: [Province/State,Country/Region,Last Update,Confirmed,Deaths,Recovered,Latitude,Longitude]
+             0,             1,                2,         3,      4,      5,        6,       7
+    value:    ,     Brazil,     2020-03-17T15:33:06,    321,    1,     2,      -14.2350, -51.9253
 
-    _path_ = pathlib.Path().absolute() / 'data'
+    """
+    confirmed, deaths = line.split(",")[3:5]
+    confirmed = 0 if confirmed == '' else int(confirmed)
+    deaths = 0 if deaths == '' else int(deaths)
+    return confirmed, deaths
+
+
+def brazil_data() -> List[Dict]:
+    """
+    data from JHU: csse_covid_19_daily_reports
+    https://github.com/CSSEGISandData/COVID-19
+    """
+
+    _path_ = str(pathlib.Path().absolute() / 'data/')
     p = pathlib.Path(_path_)
+    
+    # utils functions
+    rmcsv = lambda s: _str2date(s.split(".")[0])
+    addcsv = lambda d: '{}/{}.csv'.format(_path_, _date2str(d))
+    onlynename = lambda s: s.split("/")[-1].split(".")[0]
+    
     # ordena por data
-    files = sorted((_str2date(i.name.split(".")[0]) for i in p.iterdir() if i.is_file()))
+    files = sorted((rmcsv(i.name) for i in p.iterdir() if i.is_file()))
+    files = [addcsv(i) for i in files]
+    brazil_series = []
+    for file in files:
+        with open(file, 'r') as f:
+            dados = [i.strip() for i in f.readlines() if 'Brazil' in i]
+            if dados:
+                confirmed, deaths = csv_line(dados[0])
+                brazil_series.append(
+                    {'date': onlynename(file),
+                    'confirmed': confirmed,
+                    'deaths': deaths 
+                    })
+        
+    return brazil_series
 
+# [test]
+# def calc():
 
+#     dados = brazil_data()
+#     print(dados)
+#     mortos = sum([i['deaths'] for i in dados])
+#     casos = sum([i['confirmed'] for i in dados])
+#     print(mortos)
+#     print(casos)
+    
+#     line_chart = pygal.Line()
+#     line_chart.title = 'Browser usage evolution (in %)'
+#     line_chart.x_labels = map(str, range(2002, 2013))
+#     line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
+#     line_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
+#     line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
+#     line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
+#     x = line_chart.render(is_unicode=True) 
+#     #line_chart.render_to_png("/home/jhoonb/proj/corona/opa.png")
+#     with open('/home/jhoonb/proj/corona/opa.svg', 'w') as arq:
+#         arq.write(x)
 
 
 # console color
@@ -42,75 +101,51 @@ CR = {
     'green': '\u001b[32m',
     'reset': '\u001b[0m',
     'yellow': '\u001b[33m',
-    'cyan': '\u001b[36m'
+    'cyan': '\u001b[36m',
+    'bblue': '\33[44m',
+    'bgreen': '\33[42m',
+    'bgrey': '\33[100m'
 }
 
 
 class CoronaData:
 
     def __init__(self):
+        self._bingdata = None
         self.world_cases = 0
         self.world_deaths = 0
+        self.world_recovered = 0
         self.brazil_cases = 0
         self.brazil_deaths = 0
+        self.brazil_recovered = 0
         self.world_death_rate = 0.0
         self.brazil_death_rate = 0.0
+        self.world_recovered_rate = 0.0
+        self.brazil_recovered_rate = 0.0
 
-    
+
     def _rates(self):
-        wdr = (self.world_deaths * 100) / self.world_cases
-        bdr = (self.brazil_deaths * 100) / self.brazil_cases
-        self.world_death_rate = round(wdr, 2)
-        self.brazil_death_rate = round(bdr, 2)
+
+        _calc = lambda x, y: round(((x * 100) / y), 2)
+        self.world_death_rate = _calc(self.world_deaths, self.world_cases)
+        self.brazil_death_rate = _calc(self.brazil_deaths, self.brazil_cases)
+        self.world_recovered_rate = _calc(self.world_recovered, self.world_cases)
+        self.brazil_recovered_rate = _calc(self.brazil_recovered, self.brazil_cases)
 
 
     def load(self):
-        link = "https://www.worldometers.info/coronavirus/"
+        # new source
+        link = "https://www.bing.com/covid/data"
         with urllib.request.urlopen(link) as response:
-            html = response.read().decode("utf-8")
+            json_data = response.read().decode("utf-8")
+            self._bingdata = json.loads(json_data)
         
-        # get Coronavirus Cases
-        index_begin = html.find('#aaa">') + 6   
-        # cut html     
-        html = html[index_begin:]
-        index_end = html.find('</span>')
-        world_cases = html[:index_end].strip()
-
-        # cut html
-        html = html[index_end:]
-        # get Deaths Number
-        index_begin = html.find('<span>') + 6
-        # cut html     
-        html = html[index_begin:]
-        index_end = html.find('</span>')
-        world_deaths = html[:index_end].strip()
-
-        # get brazil 
-        # cut html
-        html = html[index_end:]
-        index_end = html.find('Brazil') + 11
-        # cut html
-        html = html[index_end:]
-        # get brazil cases
-        index_begin = html.find('">') + 2
-        # cut html
-        html = html[index_begin:]
-        index_end = html.find('</td>')
-        brazil_cases = html[:index_end].strip()
-
-        # cut html
-        html = html[index_end:]
-        index_begin = html.find('">') + 2
-        html = html[index_begin:]
-        index_begin = html.find('">') + 2
-        html = html[index_begin:]
-        index_end = html.find('</td>')
-        brazil_deaths = html[:index_end].strip()
-
-        self.world_cases = _toint(world_cases)
-        self.world_deaths = _toint(world_deaths)
-        self.brazil_cases = _toint(brazil_cases)
-        self.brazil_deaths = _toint(brazil_deaths)
+        self.world_cases = self._bingdata['totalConfirmed']
+        self.world_deaths = self._bingdata['totalDeaths']
+        self.world_recovered = self._bingdata['totalRecovered']
+        self.brazil_cases = self._bingdata['areas'][19]['totalConfirmed']
+        self.brazil_deaths = self._bingdata['areas'][19]['totalDeaths']
+        self.brazil_recovered = self._bingdata['areas'][19]['totalRecovered']
         # rate
         self._rates()
 
@@ -131,18 +166,28 @@ class CoronaData:
 
 
     def monitor(self):
-        print(f"""
-
--------- {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']} --------
-- Casos no mundo:              {CR['red']}{self.world_cases}{CR['reset']}
-- Número de mortos no Mundo:   {CR['red']}{self.world_deaths}{CR['reset']}
-- Casos no Brasil:             {CR['red']}{self.brazil_cases}{CR['reset']}
-- Número de Mortos no Brasil:  {CR['red']}{self.brazil_deaths}{CR['reset']}
-
-- Taxa de Mortalidade(Mundo):  {CR['red']}{self.world_death_rate}%{CR['reset']}
-- Taxa de Mortalidade(Brasil): {CR['red']}{self.brazil_death_rate}%{CR['reset']}
-
-""")
+        """
+        wtf
+        """
+        data_hora = datetime.datetime.now()
+        data_hora = data_hora.strftime('%d/%m/%Y %H:%M')
+        print(
+            f" -------- {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']} --------",
+            f"\n{CR['bblue']}{'jhoonb.github.io/corona':^40}{CR['reset']}",
+            f"\n{CR['bgrey']}atualizado em: {data_hora:^25}{CR['reset']}",
+            f"\n{'NÚMEROS NO MUNDO':^40}",
+            f"\n- {'CASOS:':<15}{CR['red']}{self.world_cases:>15}{CR['reset']}",
+            f"\n- {'MORTES:':<15}{CR['red']}{self.world_deaths:>15}{CR['reset']}",
+            f"\n- {'RECUPERADOS:':<15}{CR['green']}{self.world_recovered:>15}{CR['reset']}",
+            f"\n{'NÚMEROS NO BRASIL':^40}",
+            f"\n- {'CASOS:':<15}{CR['red']}{self.brazil_cases:>15}{CR['reset']}",
+            f"\n- {'MORTES:':<15}{CR['red']}{self.brazil_deaths:>15}{CR['reset']}",
+            f"\n- {'RECUPERADOS:':<15}{CR['green']}{self.brazil_recovered:>15}{CR['reset']}",
+            f"\n{'TAXAS':^40}",
+            f"\n- {'MORTALIDADE (Mundo):'}{CR['red']}{self.world_death_rate:>9}%{CR['reset']}",
+            f"\n- {'MORTALIDADE (Brasil):'}{CR['red']}{self.brazil_death_rate:>8}%{CR['reset']}",
+            f"\n- {'RECUPERADOS (Mundo):'}{CR['green']}{self.world_recovered_rate:>9}%{CR['reset']}",
+            f"\n- {'RECUPERADOS (Brasil):'}{CR['green']}{self.brazil_recovered_rate:>8}%{CR['reset']}")
 
 
 """
@@ -166,7 +211,7 @@ if __name__ == '__main__':
             while True:
                 tmp = time.asctime(time.localtime(time.time()))
                 print("Press Control + Z to exit...", end="\r")
-                print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}', end="\r")
+                print(f'{CR["yellow"]} MONITOR COVID-19: {tmp}{CR["reset"]}\n', end="\r")
                 if cont_tempo % cont_max == 0:
                     corona.load()
                     corona.monitor()
