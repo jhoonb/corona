@@ -143,9 +143,13 @@ class CoronaData:
         self.world_cases = self._bingdata['totalConfirmed']
         self.world_deaths = self._bingdata['totalDeaths']
         self.world_recovered = self._bingdata['totalRecovered']
-        self.brazil_cases = self._bingdata['areas'][19]['totalConfirmed']
-        self.brazil_deaths = self._bingdata['areas'][19]['totalDeaths']
-        self.brazil_recovered = self._bingdata['areas'][19]['totalRecovered']
+        # find brazil
+        for index, j in enumerate(self._bingdata['areas']):
+            if j['id'] == 'brazil':
+                self.brazil_cases = self._bingdata['areas'][index]['totalConfirmed']
+                self.brazil_deaths = self._bingdata['areas'][index]['totalDeaths']
+                self.brazil_recovered = self._bingdata['areas'][index]['totalRecovered']
+                break
         # rate
         self._rates()
 
