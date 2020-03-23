@@ -1,3 +1,6 @@
+"""
+APENAS PARA TESTE LOCAL
+"""
 import urllib.request
 import time 
 import sys 
@@ -12,7 +15,8 @@ def mt():
 
 
 def ms():
-    link = 'https://www.vs.saude.ms.gov.br/coronavirus-covid-19-3/'
+    #link anterior: https://www.vs.saude.ms.gov.br/coronavirus-covid-19-3/
+    link = 'https://www.vs.saude.ms.gov.br/coronavirus-covid-19-4/'
     try:
         with urllib.request.urlopen(link) as response:
             data = response.read().decode("utf-8")
@@ -27,7 +31,7 @@ def monitor():
     resp = ms()
     hora = time.asctime(time.localtime(time.time())).split(" ")[3]
     if resp:
-        print("NOVO BOLETIM MS!", "\tSAIU CARAIO")
+        print("NOVO BOLETIM MS!", "\t - NOVO")
     else:
         print("Nota Informativa: ", "NÃO SAIU AINDA - ", hora, end="\r")
 

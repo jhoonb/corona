@@ -18,7 +18,7 @@ body{
     color: rgb(255, 255, 255);
     text-align: center;
     /*float: center;*/
-    font-size: 1.3rem;
+    font-size: 1.1rem;
 }
 
 .conteudo-left{
@@ -28,6 +28,7 @@ body{
     float:left;
     /*background-color:#FF0; */
     padding-left: 2rem;
+    padding-right: 2rem;
     text-align: left;
     padding-bottom: 1rem;
     }
@@ -39,6 +40,7 @@ body{
     /* Cor de fundo da div */
     /*background-color:#F00;*/
     padding-left: 2rem;
+    padding-right: 2rem;
     text-align: left;
     padding-bottom: 5rem;
     }
