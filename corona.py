@@ -227,8 +227,8 @@ class CoronaData:
             self.brazil_cases['bing'],
             self.brazil_deaths['bing'],
             self.brazil_recovered['bing'],
-            self.brazil_recovered_rate['bing'],
             self.brazil_death_rate['bing'],
+            self.brazil_recovered_rate['bing'],
             localtime)
 
         with open('index.html', 'w') as file:
