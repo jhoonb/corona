@@ -29,7 +29,7 @@ python3 corona.py monitor 120
 Imagem do terminal executando o monitor:
 
 <img src="https://raw.githubusercontent.com/jhoonb/corona/master/example-terminal.png" 
-height="599" width="468">
+height="468" width="599">
 
 Objeto:
 ===
