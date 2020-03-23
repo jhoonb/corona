@@ -50,7 +50,7 @@ def txg(d):
     
     t = len(d)
     i = 1
-    media = [0.17]
+    media = []
     
     while True:
         if i == t-1:
@@ -219,12 +219,16 @@ class CoronaData:
     def index(self):
         localtime = time.asctime(time.localtime(time.time()))
         index = HTML_INDEX_PAGE.format(
+            self.world_cases['bing'], 
+            self.world_deaths['bing'],
+            self.world_recovered['bing'],
             self.world_death_rate['bing'],
-            self.brazil_death_rate['bing'],
-            self.world_cases['bing'],
-            self.world_deaths['bing'], 
+            self.world_recovered_rate['bing'],
             self.brazil_cases['bing'],
             self.brazil_deaths['bing'],
+            self.brazil_recovered['bing'],
+            self.brazil_recovered_rate['bing'],
+            self.brazil_death_rate['bing'],
             localtime)
 
         with open('index.html', 'w') as file:
