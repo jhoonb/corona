@@ -27,6 +27,7 @@ def _date2str(dt: datetime.datetime) -> str:
     return dt.strftime("%m-%d-%Y")
 
 
+# sem desenvolvimento
 def csv_line(line: str) -> str:
     """
     format 
@@ -41,6 +42,48 @@ def csv_line(line: str) -> str:
     return confirmed, deaths
 
 
+# sem desenvolvimento
+def txg(d):
+
+    def _txg(pr, pa):
+        return (pr-pa)/pa if pa != 0 else 0
+    
+    t = len(d)
+    i = 1
+    media = [0.17]
+    
+    while True:
+        if i == t-1:
+            break 
+        taxa = _txg(d[i]['confirmed'], d[i-1]['confirmed'])
+        if taxa != 0:
+            print(d[i]['date'], ': ', taxa, " | percentual: ", round(taxa*100, 2))
+            media.append(taxa)
+        i += 1
+
+    print(sum(media)/len(media))
+
+# em desenvolvimento
+def new():
+
+    def _data(link):
+        with urllib.request.urlopen(confirmed_link) as response:
+            data = response.read().decode("utf-8")
+        return [i for i in data.split("\n") if 'Brazil' in i][0]
+
+    confirmed_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
+    deaths_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
+    recovered_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
+
+    data_confirmed = _data(confirmed_link)
+    data_deaths = _data(deaths_link)
+    data_recovered = _data(recovered_link)
+
+    print(data_confirmed)
+    print(data_deaths)
+    print(data_recovered)
+
+# sem desenvolvimento
 def brazil_data() -> List[Dict]:
     """
     data from JHU: csse_covid_19_daily_reports
@@ -111,59 +154,77 @@ CR = {
 class CoronaData:
 
     def __init__(self):
-        self._bingdata = None
-        self.world_cases = 0
-        self.world_deaths = 0
-        self.world_recovered = 0
-        self.brazil_cases = 0
-        self.brazil_deaths = 0
-        self.brazil_recovered = 0
-        self.world_death_rate = 0.0
-        self.brazil_death_rate = 0.0
-        self.world_recovered_rate = 0.0
-        self.brazil_recovered_rate = 0.0
+        self._data = {}
+        self.world_cases = {}
+        self.world_deaths = {}
+        self.world_recovered = {}
+        self.brazil_cases = {}
+        self.brazil_deaths = {}
+        self.brazil_recovered = {}
+        self.world_death_rate = {}
+        self.brazil_death_rate = {}
+        self.world_recovered_rate = {}
+        self.brazil_recovered_rate = {}
 
 
     def _rates(self):
 
         _calc = lambda x, y: round(((x * 100) / y), 2)
-        self.world_death_rate = _calc(self.world_deaths, self.world_cases)
-        self.brazil_death_rate = _calc(self.brazil_deaths, self.brazil_cases)
-        self.world_recovered_rate = _calc(self.world_recovered, self.world_cases)
-        self.brazil_recovered_rate = _calc(self.brazil_recovered, self.brazil_cases)
+        # bing source
+        self.world_death_rate['bing'] = _calc(self.world_deaths['bing'], self.world_cases['bing'])
+        self.brazil_death_rate['bing'] = _calc(self.brazil_deaths['bing'], self.brazil_cases['bing'])
+        self.world_recovered_rate['bing'] = _calc(self.world_recovered['bing'], self.world_cases['bing'])
+        self.brazil_recovered_rate['bing'] = _calc(self.brazil_recovered['bing'], self.brazil_cases['bing'])
+
+        # G1 source
+        # [todo]
 
 
-    def load(self):
-        # new source
+    def _load_from_bing(self):
         link = "https://www.bing.com/covid/data"
         with urllib.request.urlopen(link) as response:
             json_data = response.read().decode("utf-8")
-            self._bingdata = json.loads(json_data)
-        
-        self.world_cases = self._bingdata['totalConfirmed']
-        self.world_deaths = self._bingdata['totalDeaths']
-        self.world_recovered = self._bingdata['totalRecovered']
+            self._data['bing'] = json.loads(json_data)
+
+        self.world_cases['bing'] = self._data['bing']['totalConfirmed']
+        self.world_deaths['bing'] = self._data['bing']['totalDeaths']
+        self.world_recovered['bing'] = self._data['bing']['totalRecovered']
         # find brazil
-        for index, j in enumerate(self._bingdata['areas']):
+        for index, j in enumerate(self._data['bing']['areas']):
             # [TODO] change 'brazil' for your country
             if j['id'] == 'brazil':
-                self.brazil_cases = self._bingdata['areas'][index]['totalConfirmed']
-                self.brazil_deaths = self._bingdata['areas'][index]['totalDeaths']
-                self.brazil_recovered = self._bingdata['areas'][index]['totalRecovered']
+                self.brazil_cases['bing'] = self._data['bing']['areas'][index]['totalConfirmed']
+                self.brazil_deaths['bing'] = self._data['bing']['areas'][index]['totalDeaths']
+                self.brazil_recovered['bing'] = self._data['bing']['areas'][index]['totalRecovered']
                 break
-        # rate
+
+
+    def _load_from_g1(self):
+        link = "https://especiais.g1.globo.com/bemestar/coronavirus/mapa-coronavirus/data/brazil-cases.json"
+        with urllib.request.urlopen(link) as response:
+            json_data = response.read().decode("utf-8")
+            self._data['g1'] = json.loads(json_data)['docs']
+
+        self.brazil_cases['g1'] = sum((i['cases'] for i in self._data['g1']))
+        #self.world_deaths['g1'] = self._data['g1']['totalDeaths']
+        #self.world_recovered['g1'] = self._data['g1']['totalRecovered']
+
+
+    def load(self):
+        self._load_from_bing()
+        self._load_from_g1()
         self._rates()
 
 
     def index(self):
         localtime = time.asctime(time.localtime(time.time()))
         index = HTML_INDEX_PAGE.format(
-            self.world_death_rate,
-            self.brazil_death_rate,
-            self.world_cases,
-            self.world_deaths, 
-            self.brazil_cases,
-            self.brazil_deaths,
+            self.world_death_rate['bing'],
+            self.brazil_death_rate['bing'],
+            self.world_cases['bing'],
+            self.world_deaths['bing'], 
+            self.brazil_cases['bing'],
+            self.brazil_deaths['bing'],
             localtime)
 
         with open('index.html', 'w') as file:
@@ -182,20 +243,20 @@ class CoronaData:
         print(
             f"\n -------- {CR['cyan']}CORONAVIRUS COVID-19{CR['reset']} --------",
             f"\n{CR['bblue']}{'jhoonb.github.io/corona':^40}{CR['reset']}",
-            f"\n{CR['bgrey']}atualizado em: {data_hora:^25}{CR['reset']}",
+            f"\n{CR['bgrey']}  atualizado em: {data_hora:^25}{CR['reset']}",
             f"\n{'NÚMEROS NO MUNDO':^40}",
-            f"\n- {'CASOS:':<15}{CR['red']}{self.world_cases:>15}{CR['reset']}",
-            f"\n- {'MORTES:':<15}{CR['red']}{self.world_deaths:>15}{CR['reset']}",
-            f"\n- {'RECUPERADOS:':<15}{CR['green']}{self.world_recovered:>15}{CR['reset']}",
-            f"\n{'NÚMEROS NO BRASIL':^40}",
-            f"\n- {'CASOS:':<15}{CR['red']}{self.brazil_cases:>15}{CR['reset']}",
-            f"\n- {'MORTES:':<15}{CR['red']}{self.brazil_deaths:>15}{CR['reset']}",
-            f"\n- {'RECUPERADOS:':<15}{CR['green']}{self.brazil_recovered:>15}{CR['reset']}",
+            f"\n- {'CASOS:':<15}{CR['red']}{self.world_cases['bing']:>15}{CR['reset']}",
+            f"\n- {'MORTES:':<15}{CR['red']}{self.world_deaths['bing']:>15}{CR['reset']}",
+            f"\n- {'RECUPERADOS:':<15}{CR['green']}{self.world_recovered['bing']:>15}{CR['reset']}",
+            f"\n{'NÚMEROS NO BRASIL(Bing | G1)':^45}",
+            f"\n- {'CASOS:':<13}{CR['red']}{self.brazil_cases['bing']:>15} | {self.brazil_cases['g1']}{CR['reset']}",
+            f"\n- {'MORTES:':<15}{CR['red']}{self.brazil_deaths['bing']:>15}{CR['reset']}",
+            f"\n- {'RECUPERADOS:':<15}{CR['green']}{self.brazil_recovered['bing']:>15}{CR['reset']}",
             f"\n{'TAXAS':^40}",
-            f"\n- {'MORTALIDADE (Mundo):'}{CR['red']}{self.world_death_rate:>9}%{CR['reset']}",
-            f"\n- {'MORTALIDADE (Brasil):'}{CR['red']}{self.brazil_death_rate:>8}%{CR['reset']}",
-            f"\n- {'RECUPERADOS (Mundo):'}{CR['green']}{self.world_recovered_rate:>9}%{CR['reset']}",
-            f"\n- {'RECUPERADOS (Brasil):'}{CR['green']}{self.brazil_recovered_rate:>8}%{CR['reset']}")
+            f"\n- {'MORTALIDADE (Mundo):'}{CR['red']}{self.world_death_rate['bing']:>9}%{CR['reset']}",
+            f"\n- {'MORTALIDADE (Brasil):'}{CR['red']}{self.brazil_death_rate['bing']:>8}%{CR['reset']}",
+            f"\n- {'RECUPERADOS (Mundo):'}{CR['green']}{self.world_recovered_rate['bing']:>9}%{CR['reset']}",
+            f"\n- {'RECUPERADOS (Brasil):'}{CR['green']}{self.brazil_recovered_rate['bing']:>8}%{CR['reset']}")
 
     
     def _monitor_win(self):
@@ -207,20 +268,20 @@ class CoronaData:
         print(
             f"\n -------- CORONAVIRUS COVID-19 --------",
             f"\n{'jhoonb.github.io/corona':^40}",
-            f"\natualizado em: {data_hora:^25}",
+            f"\n  atualizado em: {data_hora:^25}",
             f"\n{'NÚMEROS NO MUNDO':^40}",
-            f"\n- {'CASOS:':<15}{self.world_cases:>15}",
-            f"\n- {'MORTES:':<15}{self.world_deaths:>15}",
-            f"\n- {'RECUPERADOS:':<15}{self.world_recovered:>15}",
-            f"\n{'NÚMEROS NO BRASIL':^40}",
-            f"\n- {'CASOS:':<15}{self.brazil_cases:>15}",
-            f"\n- {'MORTES:':<15}{self.brazil_deaths:>15}",
-            f"\n- {'RECUPERADOS:':<15}{self.brazil_recovered:>15}",
+            f"\n- {'CASOS:':<15}{self.world_cases['bing']:>15}",
+            f"\n- {'MORTES:':<15}{self.world_deaths['bing']:>15}",
+            f"\n- {'RECUPERADOS:':<15}{self.world_recovered['bing']:>15}",
+            f"\n{'NÚMEROS NO BRASIL (Bing | G1)':^40}",
+            f"\n- {'CASOS:':<15}{self.brazil_cases['bing']:>15} | {self.brazil_cases['g1']}",
+            f"\n- {'MORTES:':<15}{self.brazil_deaths['bing']:>15}",
+            f"\n- {'RECUPERADOS:':<15}{self.brazil_recovered['bing']:>15}",
             f"\n{'TAXAS':^40}",
-            f"\n- {'MORTALIDADE (Mundo):'}{self.world_death_rate:>9}%",
-            f"\n- {'MORTALIDADE (Brasil):'}{self.brazil_death_rate:>8}%",
-            f"\n- {'RECUPERADOS (Mundo):'}{self.world_recovered_rate:>9}%",
-            f"\n- {'RECUPERADOS (Brasil):'}{self.brazil_recovered_rate:>8}%")
+            f"\n- {'MORTALIDADE (Mundo):'}{self.world_death_rate['bing']:>9}%",
+            f"\n- {'MORTALIDADE (Brasil):'}{self.brazil_death_rate['bing']:>8}%",
+            f"\n- {'RECUPERADOS (Mundo):'}{self.world_recovered_rate['bing']:>9}%",
+            f"\n- {'RECUPERADOS (Brasil):'}{self.brazil_recovered_rate['bing']:>8}%")
 
 
 

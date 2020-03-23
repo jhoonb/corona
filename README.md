@@ -29,7 +29,7 @@ python3 corona.py monitor 120
 Imagem do terminal executando o monitor:
 
 <img src="https://raw.githubusercontent.com/jhoonb/corona/master/example-terminal.png" 
-height="308" width="371">
+height="599" width="468">
 
 Objeto:
 ===
@@ -78,6 +78,8 @@ Fonte de dados
 ===
 
 - Microsoft Bing: [bing-covid](https://bing.com/covid) 
+
+- G1 Globo: [G1](https://especiais.g1.globo.com/bemestar/coronavirus/mapa-coronavirus/)
 
 - Modelo baseado da página index.html: [minimalist-portfolio](https://github.com/giotsere/minimalist-portfolio)
 
