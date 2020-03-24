@@ -10,6 +10,7 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="120">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/a80232805f.js" crossorigin="anonymous"></script>
@@ -19,7 +20,7 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
 <body>
     
 
-    <div class="titulo" ><h1> <i class="fas fa-terminal"></i> COVID-19 | CORONAVÍRUS | MONITOR</h1> </div>  
+    <div class="titulo" ><h1> <i class="fas fa-terminal blink_me"></i> COVID-19 | CORONAVÍRUS | MONITOR</h1> </div>  
 
     <div = class="conteudo-left">
         <h2 class="titulo-tabela selecionar">MUNDO</h2>

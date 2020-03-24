@@ -81,6 +81,4 @@ Fonte de dados
 
 - G1 Globo: [G1](https://especiais.g1.globo.com/bemestar/coronavirus/mapa-coronavirus/)
 
-- Modelo baseado da página index.html: [minimalist-portfolio](https://github.com/giotsere/minimalist-portfolio)
-
 - Novel Coronavirus (COVID-19) Cases, provided by: [JHU CSSE](https://github.com/CSSEGISandData/COVID-19)
