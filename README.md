@@ -35,10 +35,10 @@ Objeto:
 ===
 
 ```python
-from corona import CoronaData
+from corona import Corona
 
 ## classe
-corona = CoronaData()
+corona = Corona()
 
 ## métodos
 # dados json do bing
@@ -49,28 +49,33 @@ corona.index()
 corona.monitor()
 
 ## atributos 
-# número de mortos no mundo (int)
+# duas fontes de dados: Microsoft Bing e G1 Globo
+# número de mortos no mundo (dict) {'bing': int, 'g1': int}
 corona.world_deaths
-# número de mortos no Brasil (int)
+# número de mortos no Brasil (dict) {'bing': int, 'g1': int}
 corona.brazil_deaths
-# número casos no mundo (int)
+# número casos no mundo (dict) {'bing': int, 'g1': int}
 corona.world_cases
-# número de casos no Brazil (int)
+# número de casos no Brazil (dict) {'bing': int, 'g1': int}
 corona.brazil_cases
-# número de recuperados no mundo (int)
+# número de recuperados no mundo (dict) {'bing': int, 'g1': int}
 corona.world_recovered
-# número de recuperados no Brasil (int)
+# número de recuperados no Brasil (dict) {'bing': int, 'g1': int}
 corona.brazil_recovered 
-# taxa de mortalidade no mundo (float)
+# taxa de mortalidade no mundo (dict) {'bing': int, 'g1': float}
 corona.world_death_rate
-# taxa de mortalidade no Brasil (float)
+# taxa de mortalidade no Brasil (dict) {'bing': int, 'g1': float}
 corona.brazil_death_rate
-# taxa de recuperados no mundo (float)
+# taxa de recuperados no mundo (dict) {'bing': int, 'g1': float}
 corona.world_recovered_rate 
-# taxa de recuperados no Brasil (float)
+# taxa de recuperados no Brasil (dict) {'bing': int, 'g1': float}
 corona.brazil_recovered_rate
 
+# exemplo. número de casos confirmados (fonte bing)
+corona.world_cases['bing']
 
+# exemplo. número de casos confirmados (fonte bing)
+corona.brazil_cases['g1']
 ```
 
 
@@ -79,6 +84,6 @@ Fonte de dados
 
 - Microsoft Bing: [bing-covid](https://bing.com/covid) 
 
-- G1 Globo: [G1](https://especiais.g1.globo.com/bemestar/coronavirus/mapa-coronavirus/)
+- G1 Globo (APENAS DADOS DO BRASIL): [G1](https://especiais.g1.globo.com/bemestar/coronavirus/mapa-coronavirus/)
 
 - Novel Coronavirus (COVID-19) Cases, provided by: [JHU CSSE](https://github.com/CSSEGISandData/COVID-19)

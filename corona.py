@@ -9,39 +9,16 @@ from typing import List, Dict
 from str_index import HTML_INDEX_PAGE
 
 
-def _toint(n: str) -> int:
-    n = n.replace(",", "")
-    try:
-        n = int(n)
-    except:
-        raise Exception("fail to convert str to int")
-    return n
+# def _str2date(ds: str) -> datetime.datetime:
+#     fmt =  '%m-%d-%Y'
+#     return datetime.datetime.strptime(ds, fmt)
 
 
-def _str2date(ds: str) -> datetime.datetime:
-    fmt =  '%m-%d-%Y'
-    return datetime.datetime.strptime(ds, fmt)
+# def _date2str(dt: datetime.datetime) -> str:
+#     return dt.strftime("%m-%d-%Y")
 
 
-def _date2str(dt: datetime.datetime) -> str:
-    return dt.strftime("%m-%d-%Y")
-
-
-# sem desenvolvimento
-def csv_line(line: str) -> str:
-    """
-    format 
-    key: [Province/State,Country/Region,Last Update,Confirmed,Deaths,Recovered,Latitude,Longitude]
-             0,             1,                2,         3,      4,      5,        6,       7
-    value:    ,     Brazil,     2020-03-17T15:33:06,    321,    1,     2,      -14.2350, -51.9253
-
-    """
-    confirmed, deaths = line.split(",")[3:5]
-    confirmed = 0 if confirmed == '' else int(confirmed)
-    deaths = 0 if deaths == '' else int(deaths)
-    return confirmed, deaths
-
-
+# [TODO]
 # sem desenvolvimento
 def txg(d):
 
@@ -63,57 +40,37 @@ def txg(d):
 
     print(sum(media)/len(media))
 
+
+# [TODO]
 # em desenvolvimento
 def new():
-
-    def _data(link):
-        with urllib.request.urlopen(confirmed_link) as response:
+    """
+    data from JHU: csse_covid_19_daily_reports
+    https://github.com/CSSEGISandData/COVID-19
+    """
+    def _data(link: str):
+        with urllib.request.urlopen(link) as response:
             data = response.read().decode("utf-8")
-        return [i for i in data.split("\n") if 'Brazil' in i][0]
 
-    confirmed_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv'
-    deaths_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv'
+        """
+        Province/State,Country/Region,Lat,Long,1/22/20, ... ,3/23/20
+        0         1           2     3    4     5      n-2     n-1
+        """
+        data = [i.strip() for i in data.split("\n")]
+        header = data[0].split(',')[5:]
+        _line = [i for i in data[1:] if 'Brazil' in i][0].strip()
+        serie = _line.split(",")[5:]
+        return {'header': header, 'series': serie}
+
+    confirmed_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv'
+    deaths_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_deaths_global.csv'
     recovered_link = 'https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Recovered.csv'
 
     data_confirmed = _data(confirmed_link)
     data_deaths = _data(deaths_link)
     data_recovered = _data(recovered_link)
+    return  data_confirmed, data_deaths, data_recovered
 
-    print(data_confirmed)
-    print(data_deaths)
-    print(data_recovered)
-
-# sem desenvolvimento
-def brazil_data() -> List[Dict]:
-    """
-    data from JHU: csse_covid_19_daily_reports
-    https://github.com/CSSEGISandData/COVID-19
-    """
-
-    _path_ = str(pathlib.Path().absolute() / 'data/')
-    p = pathlib.Path(_path_)
-    
-    # utils functions
-    rmcsv = lambda s: _str2date(s.split(".")[0])
-    addcsv = lambda d: '{}/{}.csv'.format(_path_, _date2str(d))
-    onlynename = lambda s: s.split("/")[-1].split(".")[0]
-    
-    # ordena por data
-    files = sorted((rmcsv(i.name) for i in p.iterdir() if i.is_file()))
-    files = [addcsv(i) for i in files]
-    brazil_series = []
-    for file in files:
-        with open(file, 'r') as f:
-            dados = [i.strip() for i in f.readlines() if 'Brazil' in i]
-            if dados:
-                confirmed, deaths = csv_line(dados[0])
-                brazil_series.append(
-                    {'date': onlynename(file),
-                    'confirmed': confirmed,
-                    'deaths': deaths 
-                    })
-        
-    return brazil_series
 
 # [test]
 # def calc():
@@ -151,7 +108,7 @@ CR = {
 }
 
 
-class CoronaData:
+class Corona:
 
     def __init__(self):
         self._data = {}
@@ -170,11 +127,18 @@ class CoronaData:
     def _rates(self):
 
         _calc = lambda x, y: round(((x * 100) / y), 2)
-        # bing source
-        self.world_death_rate['bing'] = _calc(self.world_deaths['bing'], self.world_cases['bing'])
-        self.brazil_death_rate['bing'] = _calc(self.brazil_deaths['bing'], self.brazil_cases['bing'])
-        self.world_recovered_rate['bing'] = _calc(self.world_recovered['bing'], self.world_cases['bing'])
-        self.brazil_recovered_rate['bing'] = _calc(self.brazil_recovered['bing'], self.brazil_cases['bing'])
+        # BING source
+        self.world_death_rate['bing'] = _calc(
+            self.world_deaths['bing'], self.world_cases['bing'])
+
+        self.brazil_death_rate['bing'] = _calc(
+            self.brazil_deaths['bing'], self.brazil_cases['bing'])
+
+        self.world_recovered_rate['bing'] = _calc(
+            self.world_recovered['bing'], self.world_cases['bing'])
+            
+        self.brazil_recovered_rate['bing'] = _calc(
+            self.brazil_recovered['bing'], self.brazil_cases['bing'])
 
         # G1 source
         # [todo]
@@ -206,6 +170,7 @@ class CoronaData:
             self._data['g1'] = json.loads(json_data)['docs']
 
         self.brazil_cases['g1'] = sum((i['cases'] for i in self._data['g1']))
+        # [TODO] capturar os dados total de mortes e recuperados do G1
         #self.world_deaths['g1'] = self._data['g1']['totalDeaths']
         #self.world_recovered['g1'] = self._data['g1']['totalRecovered']
 
@@ -218,6 +183,7 @@ class CoronaData:
 
     def index(self):
         localtime = time.asctime(time.localtime(time.time()))
+        # [TODO] apenas fonte bing, por enquanto
         index = HTML_INDEX_PAGE.format(
             self.world_cases['bing'], 
             self.world_deaths['bing'],
@@ -301,7 +267,7 @@ python3 corona.py monitor 3600
 """
 
 if __name__ == '__main__':
-    corona = CoronaData()
+    corona = Corona()
     if len(sys.argv) == 3:
         if sys.argv[1] == 'monitor':
             cont_tempo = 0
