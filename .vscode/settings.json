@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/home/jhoonb/.asdf/installs/python/3.8.1/bin/python3"
+    "python.pythonPath": "/home/jhoonb/.asdf/installs/python/3.8.1/bin/python3",
+    "python.linting.enabled": true
 }
