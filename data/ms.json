@@ -1,0 +1,230 @@
+{
+    "28-02-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/02/BOLETIM-CORONA-28-02-2020.pdf",
+        "notificado": 13,
+        "suspeito": 9, 
+        "confirmado": 0,
+        "descartado": 2, 
+        "excluido": 2,
+        "obito": 0
+    },
+    "02-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-02-02-03-2020.pdf",
+        "notificado": 16,
+        "suspeito": 9, 
+        "confirmado": 0,
+        "descartado": 3, 
+        "excluido": 4,
+        "obito": 0
+    },
+    "03-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-03-03-03-2020.pdf",
+        "notificado": 21,
+        "suspeito": 14, 
+        "confirmado": 0,
+        "descartado": 3, 
+        "excluido": 4,
+        "obito": 0
+    },
+
+    "04-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-04-04-03-2020.pdf",
+        "notificado": 22,
+        "suspeito": 11, 
+        "confirmado": 0,
+        "descartado": 3, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "05-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-05-05-03-2020.pdf",
+        "notificado": 22,
+        "suspeito": 5, 
+        "confirmado": 0,
+        "descartado": 9, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "06-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-06-06-03-2020.pdf",
+        "notificado": 25,
+        "suspeito": 7, 
+        "confirmado": 0,
+        "descartado": 10, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "09-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-07-09-03-2020.pdf",
+        "notificado": 30,
+        "suspeito": 7, 
+        "confirmado": 0,
+        "descartado": 15, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "10-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-08-10-03-2020-tabelas.pdf",
+        "notificado": 30,
+        "suspeito": 7, 
+        "confirmado": 0,
+        "descartado": 15, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "11-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-09-11-03-2020.pdf",
+        "notificado": 30,
+        "suspeito": 7, 
+        "confirmado": 0,
+        "descartado": 15, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "12-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-10-12-03-2020.pdf",
+        "notificado": 33,
+        "suspeito": 10, 
+        "confirmado": 0,
+        "descartado": 15, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "13-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-11-13-03-2020.pdf",
+        "notificado": 39,
+        "suspeito": 15, 
+        "confirmado": 0,
+        "descartado": 16, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "14-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-11-14-03-20-_14h57.pdf",
+        "notificado": 40,
+        "suspeito": 1, 
+        "confirmado": 2,
+        "descartado": 29, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "15-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-15-03-2020.pdf",
+        "notificado": 53,
+        "suspeito": 4, 
+        "confirmado": 2,
+        "descartado": 39, 
+        "excluido": 8,
+        "obito": 0
+    },
+
+    "16-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONA-16-03-2020.pdf",
+        "notificado": 88,
+        "suspeito": 33, 
+        "confirmado": 4,
+        "descartado": 41, 
+        "excluido": 10,
+        "obito": 0
+    },
+
+    "17-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-17-03-2020.pdf",
+        "notificado": 112,
+        "suspeito": 26, 
+        "confirmado": 6,
+        "descartado": 69, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "18-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-18-03-2020-1.pdf",
+        "notificado": 147,
+        "suspeito": 48, 
+        "confirmado": 7,
+        "descartado": 81, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "19-03-2020": {
+        "url": "http://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-19-03-2020.pdf",
+        "notificado": 171,
+        "suspeito": 39, 
+        "confirmado": 9,
+        "descartado": 112, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "20-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-20-03-2020.pdf",
+        "notificado": 209,
+        "suspeito": 52, 
+        "confirmado": 12,
+        "descartado": 134, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "21-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-21-03-2020-2.pdf",
+        "notificado": 235,
+        "suspeito": 50, 
+        "confirmado": 16,
+        "descartado": 159, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "22-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-22-03-2020-1-1.pdf",
+        "notificado": 272,
+        "suspeito": 50, 
+        "confirmado": 21,
+        "descartado": 190, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "23-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-23-03-2020.pdf",
+        "notificado": 300,
+        "suspeito": 70, 
+        "confirmado": 21,
+        "descartado": 198, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "24-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-24-03-2020.pdf",
+        "notificado": 329,
+        "suspeito": 38, 
+        "confirmado": 24,
+        "descartado": 256, 
+        "excluido": 11,
+        "obito": 0
+    },
+
+    "25-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-25-03-2020-FINAL.pdf",
+        "notificado": 358,
+        "suspeito": 34, 
+        "confirmado": 24,
+        "descartado": 289, 
+        "excluido": 11,
+        "obito": 0
+    }
+
+}

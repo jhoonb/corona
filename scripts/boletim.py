@@ -1,39 +1,32 @@
 """
-APENAS PARA TESTE LOCAL
+uso em teste
+local
 """
-import os
 import urllib.request
 import time 
 import sys 
-import datetime
-
-import beepy
-
-beepy.beep(sound=1)
-
-def mt():
-    link = 'http://www.saude.mt.gov.br/informe/584'
-    with urllib.request.urlopen(link) as response:
-        data = response.read().decode("utf-8")
-    tag = 'Nota Informativa'
+import json
 
 
 def ms():
-    #link anterior: https://www.vs.saude.ms.gov.br/coronavirus-covid-19-4/
-    link = 'https://www.vs.saude.ms.gov.br/coronavirus-covid-19-5/'
+    link = 'https://www.vs.saude.ms.gov.br/Geral/vigilancia-saude/vigilancia-epidemiologica/boletim-epidemiologico/covid-19/'
     try:
         with urllib.request.urlopen(link) as response:
             data = response.read().decode("utf-8")
     except:
         return False
-    pdf = 'https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-25-03-2020.pdf'
-    with urllib.request.urlopen(pdf) as response:
-        data = response.read().decode("utf-8")
-        with open('BOLETIM-CORONAVIRUS-25-03-2020.pdf', 'w') as file:
-            file.write(data)
-        os.system("nvlc /home/jhoonb/proj/corona/scripts/alert.mp3")
-    return True
+    
+    index = data.find("noticiaBox") + 10
+    data = data[index:]
+    index = data.find('href="') + 6
+    data = data[index:]
+    index = data.find('">')
+    boletim_link = data[:index]
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-19/"
 
+    print(boletim_link)
+
+    return True if link_atual != boletim_link else False
 
 
 def monitor():
@@ -42,7 +35,7 @@ def monitor():
     if resp:
         print("\tNOVO BOLETIM MS!", "\t - NOVO")
     else:
-        print("Nota Informativa: ", "NÃO SAIU AINDA - ", hora, end="\r")
+        print("Nota Informativa: ", "[Nenhuma]", hora, end="\r")
 
 
 if __name__ == '__main__':
@@ -50,4 +43,5 @@ if __name__ == '__main__':
     while True:
         print("\tCOVID-19 - SECRETARIA DE ESTADO DE SAÚDE MS")
         monitor()
-        time.sleep(120) # 60*5 = 300
+        # mudar tempo de cada request
+        time.sleep(120)
