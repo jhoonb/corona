@@ -1,4 +1,4 @@
-COVID-19: Death Rate - (Taxa de Letalidade do Coronavírus)
+COVID-19: Coronavírus - Monitor (Mundo e Brasil)
 ==
 
 Página web: [corona](https://jhoonb.github.io/corona/) 
