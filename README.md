@@ -2,6 +2,8 @@ COVID-19: Coronavírus - Monitor (Mundo e Brasil)
 ==
 
 Página web: [corona](https://jhoonb.github.io/corona/) 
+
+Dados do [Mato Grosso do Sul: _ms.json_](https://github.com/jhoonb/corona/tree/master/data)
 ===
 
 Este pequeno programa em _Python_ monitora via terminal os dados referentes ao Coronavírus (COVID-19), usando como fonte de dados a plataforma _Microsoft Bing_.

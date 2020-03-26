@@ -9,19 +9,19 @@ do Mato Grosso do Sul
 
 Fonte dos dados: [Boletim MS](https://www.vs.saude.ms.gov.br/Geral/vigilancia-saude/vigilancia-epidemiologica/boletim-epidemiologico/covid-19/)
 
-Estrutura do _json_
+Estrutura do [_json_ (clique aqui)](https://github.com/jhoonb/corona/blob/master/data/ms.json)
 
 exemplo:
 
 ```json
 
 {
-    "25-03-2020": {
-        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-25-03-2020-FINAL.pdf",
-        "notificado": 358,
-        "suspeito": 34, 
-        "confirmado": 24,
-        "descartado": 289, 
+    "26-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/BOLETIM-CORONAVIRUS-26-03-2020-1.pdf",
+        "notificado": 388,
+        "suspeito": 53, 
+        "confirmado": 25,
+        "descartado": 299, 
         "excluido": 11,
         "obito": 0
     }

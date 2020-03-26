@@ -6,6 +6,14 @@ import urllib.request
 import time 
 import sys 
 import json
+import simpleaudio as sa
+import os
+
+
+def play_sound(music):
+    wave_obj = sa.WaveObject.from_wave_file(music)
+    play_obj = wave_obj.play()
+    play_obj.wait_done()
 
 
 def ms():
@@ -22,11 +30,16 @@ def ms():
     data = data[index:]
     index = data.find('">')
     boletim_link = data[:index]
-    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-19/"
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-20/"
 
     print(boletim_link)
+    if link_atual != boletim_link:
+        path = "/".join(os.getcwd().split("/")[:-1]) + "/sound/"
+        path = path + "alert.wav"
+        play_sound(path)
+        return True
 
-    return True if link_atual != boletim_link else False
+    return False 
 
 
 def monitor():
