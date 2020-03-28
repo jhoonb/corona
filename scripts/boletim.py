@@ -30,7 +30,7 @@ def ms():
     data = data[index:]
     index = data.find('">')
     boletim_link = data[:index]
-    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-20/"
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-21/"
 
     print(boletim_link)
     if link_atual != boletim_link:

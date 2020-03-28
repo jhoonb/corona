@@ -25,6 +25,21 @@ __all__ = [
 #     return dt.strftime("%m-%d-%Y")
 
 
+def f_data(link: str, country: str) -> Dict[str, List]:
+
+    with urllib.request.urlopen(link) as response:
+        data = response.read().decode("utf-8")
+    """
+    Province/State,Country/Region,Lat,Long,1/22/20, ... ,3/23/20
+    0         1           2     3    4     5      n-2     n-1
+    """
+    data = [i.strip() for i in data.split("\n")]
+    header = data[0].split(',')[5:]
+    _line = [i for i in data[1:] if country in i][0].strip()
+    serie = _line.split(",")[5:]
+    return {'header': header, 'series': list(map(int, serie))}
+
+
 # console color [LINUX]
 CR = {
     'red': '\u001b[31m',
@@ -85,6 +100,29 @@ class Corona:
         self.links = data
 
 
+    def _rates(self) -> None:
+        """ Calculate death rate and recovered rate 
+        """
+        _calc = lambda x, y: round(((x * 100) / y), 2)
+        
+        # aux 
+        self._aux_death_rate = self.world_death_rate 
+        self._aux_death_rate_brazil = self.brazil_death_rate
+            
+        # BING
+        self.world_death_rate = _calc(
+            self.world_deaths, self.world_cases)
+
+        self.brazil_death_rate = _calc(
+            self.brazil_deaths, self.brazil_cases)
+
+        self.world_recovered_rate = _calc(
+            self.world_recovered, self.world_cases)
+            
+        self.brazil_recovered_rate = _calc(
+            self.brazil_recovered, self.brazil_cases)
+
+
     def check_change(self) -> None:
         """play a sound alert
         rate_down.wav for down death rate
@@ -116,24 +154,10 @@ class Corona:
         data from JHU: csse_covid_19_daily_reports
         https://github.com/CSSEGISandData/COVID-19
         """
-        def _data(link: str) -> dict:
-            # only brazil
-            with urllib.request.urlopen(link) as response:
-                data = response.read().decode("utf-8")
-
-            """
-            Province/State,Country/Region,Lat,Long,1/22/20, ... ,3/23/20
-            0         1           2     3    4     5      n-2     n-1
-            """
-            data = [i.strip() for i in data.split("\n")]
-            header = data[0].split(',')[5:]
-            _line = [i for i in data[1:] if 'Brazil' in i][0].strip()
-            serie = _line.split(",")[5:]
-            return {'header': header, 'series': list(map(int, serie))}
-
-        series_cases = _data(self.links['confirmed_link'])
-        series_deaths = _data(self.links['deaths_link'])
-        series_recovered = _data(self.links['recovered_link'])
+        br = 'Brazil'
+        series_cases = f_data(self.links['confirmed_link'], br)
+        series_deaths = f_data(self.links['deaths_link'], br)
+        series_recovered = f_data(self.links['recovered_link'], br)
 
         self.br = {
             'data': series_cases['header'],
@@ -141,29 +165,6 @@ class Corona:
             'morte': series_deaths['series'],
             'recuperado': series_recovered['series'] 
         }
-
-
-    def _rates(self) -> None:
-        """ Calculate death rate and recovered rate 
-        """
-        _calc = lambda x, y: round(((x * 100) / y), 2)
-        
-        # aux 
-        self._aux_death_rate = self.world_death_rate 
-        self._aux_death_rate_brazil = self.brazil_death_rate
-            
-        # BING
-        self.world_death_rate = _calc(
-            self.world_deaths, self.world_cases)
-
-        self.brazil_death_rate = _calc(
-            self.brazil_deaths, self.brazil_cases)
-
-        self.world_recovered_rate = _calc(
-            self.world_recovered, self.world_cases)
-            
-        self.brazil_recovered_rate = _calc(
-            self.brazil_recovered, self.brazil_cases)
 
 
     def _load_ms(self) -> None:
@@ -190,6 +191,15 @@ class Corona:
         self.brazil_cases = brazil['totalConfirmed']
         self.brazil_deaths = brazil['totalDeaths']
         self.brazil_recovered = brazil['totalRecovered']
+
+
+    def load_comp(self, coutries: List[str]):
+        """
+        EUA, Italia, China, Spanha, Alemanha,Reino Unido, Irã, Coreia do Sul,
+        Brasil.
+
+        """
+        pass
 
 
     def load(self) -> None:
