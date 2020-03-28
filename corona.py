@@ -7,12 +7,12 @@ import os
 
 import simpleaudio as sa
 from typing import List, Dict, Tuple
+
 from str_index import HTML_INDEX_PAGE
-from graficos import Graficos
+import graficos
 
 __all__ = [
-    'Corona',
-    'txg'
+    'Corona'
 ]
 
 # def str2date(ds: str) -> datetime.datetime:
@@ -23,30 +23,6 @@ __all__ = [
 
 # def _date2str(dt: datetime.datetime) -> str:
 #     return dt.strftime("%m-%d-%Y")
-
-
-# [TODO]
-def txg(series):
-
-    def _txg(pr, pa):
-        return (pr-pa)/pa if pa > 0 else 0
-    
-    t = len(series['header'])
-    i = 1
-    media = []
-    
-    while True:
-        if i == t-1:
-            break 
-        taxa = _txg(series['series'][i], series['series'][i-1])
-        if taxa > 0:
-            print(f'Data: {series["header"][i]} | \
-            mortos: {series["series"][i]} | percentual: {round(taxa*100, 2)}')
-            media.append(taxa)
-        i += 1
-
-    media = round(sum(media)/len(media), 2)
-    print("taxa de crescimenti (média):", round(media*100, 2))
 
 
 # console color [LINUX]
@@ -75,12 +51,13 @@ class Corona:
     def __init__(self):
         self._data = {}
         self.links = None
+        # Dados do Microsoft Bing
         self.world_cases = 0
         self.world_deaths = 0
         self.world_recovered = 0
         self.world_death_rate = 0.0
         self.world_recovered_rate = 0.0
-
+        # Dados do Microsoft Bing
         self.brazil_cases = 0
         self.brazil_deaths = 0
         self.brazil_recovered = 0
@@ -89,10 +66,10 @@ class Corona:
         
         # json config file
         self._links = self._load_links()
+
         # JHU CSSE data
-        self.series_cases = {}
-        self.series_deaths = {}
-        self.series_recovered = {}
+        self.br = {}
+
         # cache aux data
         self._aux_death_rate = 0
         self._aux_death_rate_brazil = 0
@@ -134,7 +111,7 @@ class Corona:
         play_sound(music)
 
 
-    def get_series(self):
+    def _load_br(self):
         """
         data from JHU: csse_covid_19_daily_reports
         https://github.com/CSSEGISandData/COVID-19
@@ -154,9 +131,16 @@ class Corona:
             serie = _line.split(",")[5:]
             return {'header': header, 'series': list(map(int, serie))}
 
-        self.series_cases = _data(self.links['confirmed_link'])
-        self.series_deaths = _data(self.links['deaths_link'])
-        self.series_recovered = _data(self.links['recovered_link'])
+        series_cases = _data(self.links['confirmed_link'])
+        series_deaths = _data(self.links['deaths_link'])
+        series_recovered = _data(self.links['recovered_link'])
+
+        self.br = {
+            'data': series_cases['header'],
+            'caso': series_cases['series'],
+            'morte': series_deaths['series'],
+            'recuperado': series_recovered['series'] 
+        }
 
 
     def _rates(self):
@@ -182,7 +166,7 @@ class Corona:
             self.brazil_recovered, self.brazil_cases)
 
 
-    def _load_from_ms(self):
+    def _load_ms(self):
         """ms data json - SECRETARIA DE ESTADO E DE SAÚDE MS
         """
         with urllib.request.urlopen(self.links['ms']) as response:
@@ -190,7 +174,7 @@ class Corona:
             self.ms = json.loads(json_data)
 
 
-    def _load_from_bing(self):
+    def _load_bing(self):
         """Bing Microsoft load data from url api
         """
         with urllib.request.urlopen(self.links['bing']) as response:
@@ -214,8 +198,8 @@ class Corona:
         # caso não consiga capturar os dados ou
         # fora do ar a url: não encerra 
         try: 
-            self._load_from_bing()
-            self._load_from_ms()
+            self._load_bing()
+            self._load_ms()
             self._rates()
         except:
             print("\n[BING]: Url fora do ar ou inacessivel")
@@ -233,8 +217,7 @@ class Corona:
         tx = round((ms['obito'] * 100) / ms['notificado'], 2)
         
         # grafico 
-        g = Graficos(ms=self.ms)
-        graf, tab = g.linhadark()
+        graf, tab = graficos.ms_line(self.ms, output="html", color="black")
         localtime = time.asctime(time.localtime(time.time()))
 
         index = HTML_INDEX_PAGE.format(
@@ -248,7 +231,6 @@ class Corona:
             self.brazil_recovered,
             self.brazil_death_rate,
             self.brazil_recovered_rate,
-
             # ms
             ms['notificado'],
             ms['suspeito'],
