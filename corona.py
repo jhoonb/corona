@@ -48,7 +48,7 @@ class Corona:
     corona.index()
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self._data = {}
         self.links = None
         # Dados do Microsoft Bing
@@ -77,7 +77,7 @@ class Corona:
         self.ms = {}
 
 
-    def _load_links(self):
+    def _load_links(self) -> None:
         """ load links.json config file 
         """
         with open('links.json', 'r') as f:
@@ -85,14 +85,14 @@ class Corona:
         self.links = data
 
 
-    def check_change(self):
+    def check_change(self) -> None:
         """play a sound alert
         rate_down.wav for down death rate
         rate_up.wav for up death rate 
         """        
         path = os.path.abspath(os.getcwd()) + "/sound/"
         
-        def play_sound(music):
+        def play_sound(music: str) -> None:
             wave_obj = sa.WaveObject.from_wave_file(music)
             play_obj = wave_obj.play()
             play_obj.wait_done()
@@ -111,12 +111,12 @@ class Corona:
         play_sound(music)
 
 
-    def _load_br(self):
+    def _load_br(self) -> None:
         """
         data from JHU: csse_covid_19_daily_reports
         https://github.com/CSSEGISandData/COVID-19
         """
-        def _data(link: str):
+        def _data(link: str) -> dict:
             # only brazil
             with urllib.request.urlopen(link) as response:
                 data = response.read().decode("utf-8")
@@ -143,7 +143,7 @@ class Corona:
         }
 
 
-    def _rates(self):
+    def _rates(self) -> None:
         """ Calculate death rate and recovered rate 
         """
         _calc = lambda x, y: round(((x * 100) / y), 2)
@@ -166,7 +166,7 @@ class Corona:
             self.brazil_recovered, self.brazil_cases)
 
 
-    def _load_ms(self):
+    def _load_ms(self) -> None:
         """ms data json - SECRETARIA DE ESTADO E DE SAÚDE MS
         """
         with urllib.request.urlopen(self.links['ms']) as response:
@@ -174,7 +174,7 @@ class Corona:
             self.ms = json.loads(json_data)
 
 
-    def _load_bing(self):
+    def _load_bing(self) -> None:
         """Bing Microsoft load data from url api
         """
         with urllib.request.urlopen(self.links['bing']) as response:
@@ -192,7 +192,7 @@ class Corona:
         self.brazil_recovered = brazil['totalRecovered']
 
 
-    def load(self):
+    def load(self) -> None:
         """ load data from url api
         """
         # caso não consiga capturar os dados ou
@@ -206,7 +206,7 @@ class Corona:
             print("  -> aguardando próxima checagem\n")
 
 
-    def index(self):
+    def index(self) -> None:
         """Create index.html file 
         """
         # k = data do ultimo boletim
@@ -248,7 +248,7 @@ class Corona:
             file.write(index)
 
 
-    def monitor(self):
+    def monitor(self) -> None:
         """Linux console monitor
         """
         if sys.platform != 'linux':
@@ -274,7 +274,7 @@ class Corona:
             f"\n - {CR['green']}{'TAXA DE RECUPERADOS:':.<10}{self.brazil_recovered_rate:.>9}%{CR['reset']}")
 
     
-    def _monitor_win(self):
+    def _monitor_win(self) -> None:
         """Windows console monitor
         """
         dtime = datetime.datetime.now()
@@ -297,7 +297,7 @@ class Corona:
             f"\n - {'TAXA DE RECUPERADOS:':.<10}{self.brazil_recovered_rate:.>9}%")
 
     
-    def run(self):
+    def run(self) -> None:
         """ run check_change(), load(), monitor() and index()
         """
         self.check_change()
