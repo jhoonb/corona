@@ -3,20 +3,21 @@ import time
 import urllib.request
 import datetime
 import json
+import os
 
 import simpleaudio as sa
-
 from typing import List, Dict, Tuple
 from str_index import HTML_INDEX_PAGE
-import os
+from graficos import Graficos
 
 __all__ = [
     'Corona',
     'txg'
 ]
 
-# def _str2date(ds: str) -> datetime.datetime:
-#     fmt =  '%m-%d-%Y'
+# def str2date(ds: str) -> datetime.datetime:
+#     #fmt =  '%m-%d-%Y'
+#     fmt = '%d-%m-%Y'
 #     return datetime.datetime.strptime(ds, fmt)
 
 
@@ -48,29 +49,6 @@ def txg(series):
     print("taxa de crescimenti (média):", round(media*100, 2))
 
 
-# [test]
-# def calc():
-
-#     dados = brazil_data()
-#     print(dados)
-#     mortos = sum([i['deaths'] for i in dados])
-#     casos = sum([i['confirmed'] for i in dados])
-#     print(mortos)
-#     print(casos)
-    
-#     line_chart = pygal.Line()
-#     line_chart.title = 'Browser usage evolution (in %)'
-#     line_chart.x_labels = map(str, range(2002, 2013))
-#     line_chart.add('Firefox', [None, None, 0, 16.6,   25,   31, 36.4, 45.5, 46.3, 42.8, 37.1])
-#     line_chart.add('Chrome',  [None, None, None, None, None, None,    0,  3.9, 10.8, 23.8, 35.3])
-#     line_chart.add('IE',      [85.8, 84.6, 84.7, 74.5,   66, 58.6, 54.7, 44.8, 36.2, 26.6, 20.1])
-#     line_chart.add('Others',  [14.2, 15.4, 15.3,  8.9,    9, 10.4,  8.9,  5.8,  6.7,  6.8,  7.5])
-#     x = line_chart.render(is_unicode=True) 
-#     #line_chart.render_to_png("/home/jhoonb/proj/corona/opa.png")
-#     with open('/home/jhoonb/proj/corona/opa.svg', 'w') as arq:
-#         arq.write(x)
-
-
 # console color [LINUX]
 CR = {
     'red': '\u001b[31m',
@@ -100,13 +78,15 @@ class Corona:
         self.world_cases = 0
         self.world_deaths = 0
         self.world_recovered = 0
+        self.world_death_rate = 0.0
+        self.world_recovered_rate = 0.0
+
         self.brazil_cases = 0
         self.brazil_deaths = 0
         self.brazil_recovered = 0
-        self.world_death_rate = 0.0
         self.brazil_death_rate = 0.0
-        self.world_recovered_rate = 0.0
         self.brazil_recovered_rate = 0.0
+        
         # json config file
         self._links = self._load_links()
         # JHU CSSE data
@@ -116,8 +96,8 @@ class Corona:
         # cache aux data
         self._aux_death_rate = 0
         self._aux_death_rate_brazil = 0
-        # estados do brasil
-        self.brazil_state = {}
+        # Mato Grosso do Sul
+        self.ms = {}
 
 
     def _load_links(self):
@@ -202,8 +182,16 @@ class Corona:
             self.brazil_recovered, self.brazil_cases)
 
 
+    def _load_from_ms(self):
+        """ms data json - SECRETARIA DE ESTADO E DE SAÚDE MS
+        """
+        with urllib.request.urlopen(self.links['ms']) as response:
+            json_data = response.read().decode("utf-8")
+            self.ms = json.loads(json_data)
+
+
     def _load_from_bing(self):
-        """Bing Microsoft load data from url
+        """Bing Microsoft load data from url api
         """
         with urllib.request.urlopen(self.links['bing']) as response:
             json_data = response.read().decode("utf-8")
@@ -227,6 +215,7 @@ class Corona:
         # fora do ar a url: não encerra 
         try: 
             self._load_from_bing()
+            self._load_from_ms()
             self._rates()
         except:
             print("\n[BING]: Url fora do ar ou inacessivel")
@@ -236,8 +225,18 @@ class Corona:
     def index(self):
         """Create index.html file 
         """
+        # k = data do ultimo boletim
+        k = list(self.ms.keys())[-1]
+        # dados do ultimo boletim dia k
+        ms = self.ms[k]
+        # taxa de letalidade MS
+        tx = round((ms['obito'] * 100) / ms['notificado'], 2)
+        
+        # grafico 
+        g = Graficos(ms=self.ms)
+        graf, tab = g.linhadark()
         localtime = time.asctime(time.localtime(time.time()))
-        # [TODO] apenas fonte bing, por enquanto
+
         index = HTML_INDEX_PAGE.format(
             self.world_cases, 
             self.world_deaths,
@@ -249,6 +248,18 @@ class Corona:
             self.brazil_recovered,
             self.brazil_death_rate,
             self.brazil_recovered_rate,
+
+            # ms
+            ms['notificado'],
+            ms['suspeito'],
+            ms['confirmado'],
+            ms['descartado'],
+            ms['excluido'],
+            ms['obito'],
+            tx,
+            # grafico e tabela
+            graf,
+            tab,
             localtime)
 
         with open('index.html', 'w') as file:

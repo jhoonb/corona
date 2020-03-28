@@ -14,7 +14,8 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://kit.fontawesome.com/a80232805f.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="http://kozea.github.com/pygal.js/latest/pygal-tooltips.min.js"></script>
+    <link rel="stylesheet" href="estilo.css">
     <title>COVID-19 | Mundo & Brasil</title>
 </head>
 <body>
@@ -77,6 +78,51 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
             </tr>
         </table>
     </div>
+
+    <div = class="conteudo-right">
+        <h2 class="titulo-tabela selecionar">Mato Grosso do Sul (SES)</h2>
+        <h2 class="titulo-tabela"> ----------- </h2>
+        <table border="0">
+            <tr class="selecionar">
+                <td>NOTIFICADOS:</td>
+                <td class="direita">{}</td> 
+            </tr>
+            <tr class="selecionar">
+                <td>SUSPEITOS:</td>
+                <td class="direita">{}</td> 
+            </tr>
+            <tr class="selecionar">
+                <td>CONFIRMADOS:</td>
+                <td class="direita cor-amarelo">{}</td> 
+            </tr>
+            <tr class="selecionar">
+                <td>DESCARTADOS:</td>
+                <td class="direita">{}</td> 
+            </tr>
+            <tr class="selecionar">
+                <td>EXCLUÍDOS:</td>
+                <td class="direita">{}</td> 
+            </tr>
+            <tr class="selecionar">
+                <td>ÓBITOS:</td>
+                <td class="direita cor-vermelho">{}</td> 
+            </tr>
+            <tr class="selecionar">
+                <td>TAXA DE LETALIDADE: <i class="fas fa-skull-crossbones"></i> </td>
+                <td class="direita">{}%</td> 
+            </tr>
+        </table>
+    </div>
+
+    <figure>
+      <!-- Pygal render() result: -->
+      {}
+      </figure>
+
+      <div class="tabela-grafico">
+      {}
+      </div>
+
 
     <footer class="footer">
         <div class="selecionar">  última atualização: {} </div>

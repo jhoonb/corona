@@ -23,14 +23,15 @@ body{
 
 .conteudo-left{
 
-    width:400px;
-    height:300px;
+    /*width:400px;
+    height:300px;*/
     float:left;
     /*background-color:#FF0; */
     padding-left: 2rem;
     padding-right: 2rem;
     text-align: left;
     padding-bottom: 1rem;
+    padding-bottom: 3rem;
     }
 
 .conteudo-right{
@@ -73,6 +74,17 @@ body{
     text-align: left;
 }
 
+.tabela-grafico {
+    text-align: center;
+    float: center;  
+    color: rgb(255, 255, 255);
+    display: table;
+    margin: 0px auto 0px auto; 
+    text-align: left;
+    margin-bottom: 10em;
+
+}
+
 .selecionar:hover{
     color: rgb(72, 0, 139);
     cursor: pointer;
@@ -85,6 +97,10 @@ body{
 
 .cor-vermelho {
     color: rgb(206, 0, 0);
+}
+
+.cor-amarelo {
+    color: rgb(255, 230, 0);
 }
 
 .wrapper {
@@ -135,4 +151,13 @@ a:hover{
     50% {
       opacity: 0;
     }
+  }
+
+  figure {
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 5em;
+    margin-left: 40px;
+    margin-right: 40px;
+    width: 80%;
   }
