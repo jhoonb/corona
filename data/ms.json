@@ -255,6 +255,15 @@
         "descartado": 360, 
         "excluido": 11,
         "obito": 0
+    },
+    "29-03-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/03/Boletim-Epidemiol%C3%B3gico-COVID-19-2020.03.29-FINAL.pdf",
+        "notificado": 479,
+        "suspeito": 44, 
+        "confirmado": 36,
+        "descartado": 388, 
+        "excluido": 11,
+        "obito": 0
     }
 
 }
