@@ -9,6 +9,7 @@ import json
 import simpleaudio as sa
 import os
 
+tempo = 5 * 50
 
 def play_sound(music):
     wave_obj = sa.WaveObject.from_wave_file(music)
@@ -30,7 +31,7 @@ def ms():
     data = data[index:]
     index = data.find('">')
     boletim_link = data[:index]
-    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-21/"
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-22/"
 
     print(boletim_link)
     if link_atual != boletim_link:
@@ -52,9 +53,9 @@ def monitor():
 
 
 if __name__ == '__main__':
-
+    print('tempo:', tempo)
     while True:
         print("\tCOVID-19 - SECRETARIA DE ESTADO DE SAÚDE MS")
         monitor()
         # mudar tempo de cada request
-        time.sleep(120)
+        time.sleep(tempo)
