@@ -9,7 +9,7 @@ import json
 import simpleaudio as sa
 import os
 
-tempo = 5 * 50
+tempo = 5 * 60
 
 def play_sound(music):
     wave_obj = sa.WaveObject.from_wave_file(music)
@@ -31,10 +31,11 @@ def ms():
     data = data[index:]
     index = data.find('">')
     boletim_link = data[:index]
-    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-22/"
+    # 29-03-2020
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-23/"
 
-    print(boletim_link)
     if link_atual != boletim_link:
+        print("-> [Boletim atualizado]\n", boletim_link)
         path = "/".join(os.getcwd().split("/")[:-1]) + "/sound/"
         path = path + "alert.wav"
         play_sound(path)
