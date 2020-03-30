@@ -32,7 +32,7 @@ def ms():
     index = data.find('">')
     boletim_link = data[:index]
     # 29-03-2020
-    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-23/"
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-24/"
 
     if link_atual != boletim_link:
         print("-> [Boletim atualizado]\n", boletim_link)
