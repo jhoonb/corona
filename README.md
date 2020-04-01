@@ -1,12 +1,16 @@
-COVID-19: Coronavírus - Monitor (Mundo e Brasil)
+COVID-19: Coronavírus - Monitor (Mundo, Brasil e Mato Grosso do Sul)
 ==
 
 Página web: [corona](https://jhoonb.github.io/corona/) 
 
-Dados do [Mato Grosso do Sul: _ms.json_](https://github.com/jhoonb/corona/tree/master/data)
-===
 
-Este pequeno programa em _Python_ monitora via terminal os dados referentes ao Coronavírus (COVID-19), usando como fonte de dados a plataforma _Microsoft Bing_.
+MS
+===
+Para dados do Mato Grosso do Sul, clique em: [_ms.json_](https://github.com/jhoonb/corona/tree/master/data) (na pasta _data/_)
+
+Sobre 
+===
+Este pequeno programa em _Python_ monitora via terminal os dados referentes ao Coronavírus (COVID-19), usando como fonte de dados _Worldmeters_.
 
 A cada verificação é atualizado o arquivo `index.html`, uma página estática HTML
 que expoe os dados para [jhoonb.github.io/corona/](https://jhoonb.github.io/corona/)
@@ -23,7 +27,7 @@ Em desenvolvimento
 - Gráfico do crescimento de infectados e mortos no Brasil.
 
 Uso
-===
+====
 
 Linha de comando:
 
@@ -49,7 +53,7 @@ Imagem do terminal executando o monitor:
 <img src="https://raw.githubusercontent.com/jhoonb/corona/master/example-terminal.png" 
 height="493" width="581">
 
-Objeto:
+Objeto _Corona_:
 ===
 
 ```python
@@ -57,9 +61,7 @@ from corona import Corona
 
 ## classe
 corona = Corona()
-
-## métodos
-# dados do bing
+# carrega os dados
 corona.load()
 # gera index.html
 corona.index()
@@ -68,37 +70,15 @@ corona.check_change()
 # monitora via terminal 
 corona.monitor()
 
-# ou 
+# ou executa todas os métodos acima
 corona.run()
-
-## atributos 
-# Fonte de dado: Microsoft Bing
-# número de mortos no mundo (int)
-corona.world_deaths
-# número de mortos no Brasil (int)
-corona.brazil_deaths
-# número casos no mundo (int)
-corona.world_cases
-# número de casos no Brazil (int)
-corona.brazil_cases
-# número de recuperados no mundo (int)
-corona.world_recovered
-# número de recuperados no Brasil (int)
-corona.brazil_recovered 
-# taxa de mortalidade no mundo (float)
-corona.world_death_rate
-# taxa de mortalidade no Brasil (float)
-corona.brazil_death_rate
-# taxa de recuperados no mundo (float)
-corona.world_recovered_rate 
-# taxa de recuperados no Brasil (float)
-corona.brazil_recovered_rate
 
 ```
 Biblioteca:
 ===
 
-Necessário instalar a lib simple audio para o som de alarme emitido. [simpleaudio](https://pypi.org/project/simpleaudio/)
+- Necessário instalar a lib simple audio para o som de alarme emitido. [simpleaudio](https://pypi.org/project/simpleaudio/)
+- Biblioteca para geração de gráficos: [pygal](http://www.pygal.org/)
 
 ```bash
 pip3 install simpleaudio
@@ -107,7 +87,8 @@ pip3 install simpleaudio
 
 Fonte de dados
 ===
-
-- Microsoft Bing: [bing-covid](https://bing.com/covid) 
-
+- Scrap da página [Worldmeters](https://www.worldometers.info/coronavirus/)
 - Novel Coronavirus (COVID-19) Cases, provided by: [JHU CSSE](https://github.com/CSSEGISandData/COVID-19)
+
+
+- [update 31/03] bing bloqueou API - dados agora da worldometers.info

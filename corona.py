@@ -6,14 +6,16 @@ import json
 import os
 
 import simpleaudio as sa
-from typing import List, Dict, Tuple
+from typing import List, Dict, Any
 
 from str_index import HTML_INDEX_PAGE
 import graficos
 
+
 __all__ = [
     'Corona'
 ]
+
 
 # def str2date(ds: str) -> datetime.datetime:
 #     #fmt =  '%m-%d-%Y'
@@ -25,7 +27,7 @@ __all__ = [
 #     return dt.strftime("%m-%d-%Y")
 
 
-def f_data(link: str, country: str) -> Dict[str, List]:
+def f_data(link: str, country: str) -> Dict[str, list]:
 
     with urllib.request.urlopen(link) as response:
         data = response.read().decode("utf-8")
@@ -38,6 +40,90 @@ def f_data(link: str, country: str) -> Dict[str, List]:
     _line = [i for i in data[1:] if country in i][0].strip()
     serie = _line.split(",")[5:]
     return {'header': header, 'series': list(map(int, serie))}
+
+
+def load_links() -> Any:
+    """ load links.json config file 
+    """
+    with open('links.json', 'r') as f:
+        data = json.load(f)
+    return data
+
+
+def scrap_wm(html: str):
+    # function
+    _int = lambda s: int(s.replace(",", ""))
+
+    # ----------- World
+    index_begin = html.find('#aaa">') + 6   
+    # cut html     
+    html = html[index_begin:]
+    index_end = html.find('</span>')
+    # casos no mundo
+    world_cases = html[:index_end].strip()
+
+    # cut html
+    html = html[index_end:]
+    index_begin = html.find('<span>') + 6
+    # cut html     
+    html = html[index_begin:]
+    index_end = html.find('</span>')
+    # numero de mortos
+    world_deaths = html[:index_end].strip()
+    
+    # cut html
+    html = html[index_end:]
+    # numero de recuperados
+    index_begin = html.find('<span>') + 6
+    # cut html     
+    html = html[index_begin:]
+    index_end = html.find('</span>')
+    world_recovered = html[:index_end].strip()
+    
+    # ------------ brazil 
+    # cut html
+    html = html[index_end:]
+    index_end = html.find('Brazil') + 11
+    # cut html
+    html = html[index_end:]
+    # get brazil cases
+    index_begin = html.find('">') + 2
+    # cut html
+    html = html[index_begin:]
+    index_end = html.find('</td>')
+    # numero casos
+    brazil_cases = html[:index_end].strip()
+
+    # cut html
+    html = html[index_end:]
+    index_begin = html.find('">') + 2
+    html = html[index_begin:]
+    index_begin = html.find('">') + 2
+    html = html[index_begin:]
+    index_end = html.find('</td>')
+    # numero de mortes
+    brazil_deaths = html[:index_end].strip()
+
+    # cut html
+    html = html[index_end:]
+    index_begin = html.find('">') + 2
+    html = html[index_begin:]
+    index_begin = html.find('">') + 2
+    html = html[index_begin:]
+    index_end = html.find('</td>')
+    # numero de recuperados
+    brazil_recovered = html[:index_end].strip()
+    
+    # ok
+    world_cases = _int(world_cases)
+    world_deaths = _int(world_deaths)
+    world_recovered = _int(world_recovered)
+    brazil_cases = _int(brazil_cases)
+    brazil_deaths = _int(brazil_deaths)
+    brazil_recovered = _int(brazil_recovered)
+    return (world_cases, world_deaths, 
+    world_recovered, brazil_cases, 
+    brazil_deaths, brazil_recovered)
 
 
 # console color [LINUX]
@@ -54,25 +140,15 @@ CR = {
 
 
 class Corona:
-    """
-    corona = Corona()
-    corona.run()
-    # or
-    corona.load()
-    corona.monitor()
-    corona.index()
-    """
-
+    
     def __init__(self) -> None:
-        self._data = {}
-        self.links = None
-        # Dados do Microsoft Bing
+        # mundo
         self.world_cases = 0
         self.world_deaths = 0
         self.world_recovered = 0
         self.world_death_rate = 0.0
         self.world_recovered_rate = 0.0
-        # Dados do Microsoft Bing
+        # brasil
         self.brazil_cases = 0
         self.brazil_deaths = 0
         self.brazil_recovered = 0
@@ -80,7 +156,7 @@ class Corona:
         self.brazil_recovered_rate = 0.0
         
         # json config file
-        self._links = self._load_links()
+        self.links = load_links()
 
         # JHU CSSE data
         self.br = {}
@@ -92,14 +168,6 @@ class Corona:
         self.ms = {}
 
 
-    def _load_links(self) -> None:
-        """ load links.json config file 
-        """
-        with open('links.json', 'r') as f:
-            data = json.load(f)
-        self.links = data
-
-
     def _rates(self) -> None:
         """ Calculate death rate and recovered rate 
         """
@@ -109,7 +177,7 @@ class Corona:
         self._aux_death_rate = self.world_death_rate 
         self._aux_death_rate_brazil = self.brazil_death_rate
             
-        # BING
+        # [update 31/03] worldmeters
         self.world_death_rate = _calc(
             self.world_deaths, self.world_cases)
 
@@ -149,7 +217,7 @@ class Corona:
         play_sound(music)
 
 
-    def _load_br(self) -> None:
+    def load_br(self) -> None:
         """
         data from JHU: csse_covid_19_daily_reports
         https://github.com/CSSEGISandData/COVID-19
@@ -167,7 +235,7 @@ class Corona:
         }
 
 
-    def _load_ms(self) -> None:
+    def load_ms(self) -> None:
         """ms data json - SECRETARIA DE ESTADO E DE SAÚDE MS
         """
         with urllib.request.urlopen(self.links['ms']) as response:
@@ -175,45 +243,34 @@ class Corona:
             self.ms = json.loads(json_data)
 
 
-    def _load_bing(self) -> None:
-        """Bing Microsoft load data from url api
+    def load_wm(self) -> None:
+        """Worldmeters
         """
-        with urllib.request.urlopen(self.links['bing']) as response:
-            json_data = response.read().decode("utf-8")
-            self._data = json.loads(json_data)
+        # [updated]
+        headers = {'User-Agent': 'Mozilla/5.0', 
+        'Accept': 'application/json, text/plain, */*'}
+        req = urllib.request.Request(self.links['wm'], 
+        headers=headers)
+        with urllib.request.urlopen(req) as response:
+            html = response.read().decode("utf-8")
 
-        self.world_cases = self._data['totalConfirmed']
-        self.world_deaths = self._data['totalDeaths']
-        self.world_recovered = self._data['totalRecovered']
+        d = scrap_wm(html)
 
-        # find brazil
-        brazil = [i for i in self._data['areas'] if i['id'] == 'brazil'][0]
-        self.brazil_cases = brazil['totalConfirmed']
-        self.brazil_deaths = brazil['totalDeaths']
-        self.brazil_recovered = brazil['totalRecovered']
-
-
-    def load_comp(self, coutries: List[str]):
-        """
-        EUA, Italia, China, Spanha, Alemanha,Reino Unido, Irã, Coreia do Sul,
-        Brasil.
-
-        """
-        pass
-
+        self.world_cases = d[0]
+        self.world_deaths = d[1]
+        self.world_recovered = d[2]
+        self.brazil_cases = d[3]
+        self.brazil_deaths = d[4]
+        self.brazil_recovered = d[5]
+        self._rates()
+        
 
     def load(self) -> None:
-        """ load data from url api
+        """ load
         """
-        # caso não consiga capturar os dados ou
-        # fora do ar a url: não encerra 
-        try: 
-            self._load_bing()
-            self._load_ms()
-            self._rates()
-        except:
-            print("\n[BING]: Url fora do ar ou inacessivel")
-            print("  -> aguardando próxima checagem\n")
+        self.load_wm()
+        self.load_br()
+        self.load_ms()
 
 
     def index(self) -> None:
@@ -226,8 +283,21 @@ class Corona:
         # taxa de letalidade MS
         tx = round((ms['obito'] * 100) / ms['notificado'], 2)
         
-        # grafico 
-        graf, tab = graficos.ms_line(self.ms, output="html", color="black")
+        # grafico
+        dados = {
+            'Notificados': 'notificado',
+            'Suspeitos': 'suspeito',
+            'Confirmados': 'confirmado',
+            'Descartados': 'descartado',
+            'Excluídos': 'excluido',
+            'Óbitos': 'obito'
+            } 
+
+        graf, tab = graficos.ms_line(dados, 
+        self.ms, 
+        output="html", 
+        color="white")
+        
         localtime = time.asctime(time.localtime(time.time()))
 
         index = HTML_INDEX_PAGE.format(
