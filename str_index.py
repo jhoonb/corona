@@ -112,6 +112,7 @@ HTML_INDEX_PAGE = '''<!DOCTYPE html>
                 <td class="direita">{}%</td> 
             </tr>
         </table>
+        <a href="https://github.com/jhoonb/corona/tree/master/data" target="_blank">Clique aqui para mais dados do MS</a>
     </div>
 
     <figure>

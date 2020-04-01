@@ -294,7 +294,7 @@ class Corona:
             } 
 
         graf, tab = graficos.ms_line(dados, 
-        self.ms, 
+        self.ms, None,
         output="html", 
         color="white")
         
