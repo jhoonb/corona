@@ -4,7 +4,7 @@ Dados do Estado do Mato Grosso do Sul
 Arquivo contendo os dados monitorados pela Secretaria de Estado de Saúde 
 do Mato Grosso do Sul
 
-Gráfico atualizado até dia: 01-04-2020 (formato .PNG)
+Gráfico atualizado até dia: 02-04-2020 (formato .PNG)
 ===
 
 [claro]
@@ -23,8 +23,7 @@ Apenas confirmados (a cada três dias)
 
 [claro]
 
-<img src="https://raw.githubusercontent.com/jhoonb/corona/master/data/line_ms_confirmado_claro.png" 
-height="400" width="600">
+<img src="https://raw.githubusercontent.com/jhoonb/corona/master/data/line_ms_confirmado_claro.png" height="400" width="600">
 
 [escuro]
 
