@@ -102,18 +102,19 @@ if __name__ == '__main__':
 
     # confirmados
     dados = {'Confirmados': 'confirmado'}
-    print_values=True
+    print_values = True
+    passo = 2
     a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_escuro",
-    output="png", color="black", passo=3, print_values=print_values)
+    output="png", color="black", passo=passo, print_values=print_values)
     
     a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_claro",
-    output="png", color="white", passo=3, print_values=print_values)
+    output="png", color="white", passo=passo, print_values=print_values)
     
     a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_escuro",
-    output="svg", color="black", passo=3, print_values=print_values)
+    output="svg", color="black", passo=passo, print_values=print_values)
     
     a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_claro",
-    output="svg", color="white", passo=3, print_values=print_values)
+    output="svg", color="white", passo=passo, print_values=print_values)
     
     #[TODO] grafico de barra
     print('ok')

@@ -18,7 +18,7 @@ height="400" width="600">
 height="400" width="600">
 
 
-Apenas confirmados (a cada três dias) 
+Apenas confirmados (a cada 2 dias) 
 ===
 
 [claro]
