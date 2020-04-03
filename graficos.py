@@ -12,36 +12,36 @@ __all__ = [
 ]
 
 
-def ms_line(y: dict, ms: dict, filename: str, 
-output: str = "html", color: str = "black", 
-passo=1, print_values=False) -> Tuple[str, str]:
+def ms_line(y: dict, ms: dict, filename: str,
+            output: str = "html", color: str = "black",
+            passo=1, print_values=False) -> Tuple[str, str]:
 
     if not y:
         y = {
-        'Notificados': 'notificado',
-        'Suspeitos': 'suspeito',
-        'Confirmados': 'confirmado',
-        'Descartados': 'descartado',
-        'Excluídos': 'excluido',
-        'Óbitos': 'obito'
+            'Notificados': 'notificado',
+            'Suspeitos': 'suspeito',
+            'Confirmados': 'confirmado',
+            'Descartados': 'descartado',
+            'Excluídos': 'excluido',
+            'Óbitos': 'obito'
         }
 
     if color == "black":
         graf = pygal.Line(print_values=print_values,
-        x_label_rotation=90, 
-        style=DarkStyle(value_colors=('white',)))
+                          x_label_rotation=90,
+                          style=DarkStyle(value_colors=('white',)))
         filename = "data/line_ms_escuro" if not filename else "data/"+filename
     else:
         graf = pygal.Line(print_values=print_values,
-        interpolate='cubic',
-        x_label_rotation=90)
+                          interpolate='cubic',
+                          x_label_rotation=90)
         filename = "data/line_ms_claro" if not filename else "data/"+filename
-    
+
     graf.title = 'COVID-19 | Mato Grosso do Sul\n Fonte: jhoonb.github.io/corona'
     graf.x_labels = list(ms.keys())[::passo]
     for k, v in y.items():
         graf.add(k, [ms[i][v] for i in ms.keys()][::passo])
-    
+
     if output == "html":
         return graf.render(is_unicode=True), graf.render_table(style=False)
     elif output == "svg":
@@ -52,18 +52,21 @@ passo=1, print_values=False) -> Tuple[str, str]:
     return "", graf.render_table(style=False)
 
 # [TODO]
-def ms_bar(ms: dict = None, output: str = "html", color: str = "black", passo=1) -> Tuple[str, str]:
+
+
+def ms_bar(ms: dict = None, output: str = "html",
+           color: str = "black", passo=1) -> Tuple[str, str]:
     filename = ""
     if color == "black":
         graf = pygal.Bar(print_values=True,
-        x_label_rotation=90, 
-        style=DarkStyle(value_colors=('white',)))
+                         x_label_rotation=90,
+                         style=DarkStyle(value_colors=('white',)))
         filename = "data/grafico_ms_escuro_bar"
     else:
         graf = pygal.Bar(print_values=True,
-        x_label_rotation=90)
+                         x_label_rotation=90)
         filename = "data/grafico_ms_claro_bar"
-    
+
     graf.title = 'COVID-19 | Mato Grosso do Sul\n Fonte: jhoonb.github.io/corona'
     graf.x_labels = list(ms.keys())[::passo]
     graf.add('Notificados', [ms[i]['notificado'] for i in ms.keys()][::passo])
@@ -83,7 +86,7 @@ def ms_bar(ms: dict = None, output: str = "html", color: str = "black", passo=1)
 
 
 if __name__ == '__main__':
-    import corona 
+    import corona
     c = corona.Corona()
     c.load_ms()
     print('gerando gráficos...')
@@ -103,18 +106,22 @@ if __name__ == '__main__':
     # confirmados
     dados = {'Confirmados': 'confirmado'}
     print_values = True
-    passo = 2
-    a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_escuro",
-    output="png", color="black", passo=passo, print_values=print_values)
-    
-    a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_claro",
-    output="png", color="white", passo=passo, print_values=print_values)
-    
-    a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_escuro",
-    output="svg", color="black", passo=passo, print_values=print_values)
-    
-    a, b = ms_line(dados, c.ms, filename="line_ms_confirmado_claro",
-    output="svg", color="white", passo=passo, print_values=print_values)
-    
-    #[TODO] grafico de barra
+    passo = 1
+    a, b = ms_line(
+        dados, c.ms, filename="line_ms_confirmado_escuro", output="png",
+        color="black", passo=passo, print_values=print_values)
+
+    a, b = ms_line(
+        dados, c.ms, filename="line_ms_confirmado_claro", output="png",
+        color="white", passo=passo, print_values=print_values)
+
+    a, b = ms_line(
+        dados, c.ms, filename="line_ms_confirmado_escuro", output="svg",
+        color="black", passo=passo, print_values=print_values)
+
+    a, b = ms_line(
+        dados, c.ms, filename="line_ms_confirmado_claro", output="svg",
+        color="white", passo=passo, print_values=print_values)
+
+    # [TODO] grafico de barra
     print('ok')
