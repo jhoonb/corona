@@ -3,13 +3,14 @@ uso em teste
 local
 """
 import urllib.request
-import time 
-import sys 
+import time
+import sys
 import json
 import simpleaudio as sa
 import os
 
 tempo = 5 * 60
+
 
 def play_sound(music):
     wave_obj = sa.WaveObject.from_wave_file(music)
@@ -24,15 +25,15 @@ def ms():
             data = response.read().decode("utf-8")
     except:
         return False
-    
+
     index = data.find("noticiaBox") + 10
     data = data[index:]
     index = data.find('href="') + 6
     data = data[index:]
     index = data.find('">')
     boletim_link = data[:index]
-    # 02-04-2020 último update
-    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-27/"
+    # 03-04-2020 último update
+    link_atual = "https://www.vs.saude.ms.gov.br/boletim-coronavirus-covid-19-28/"
 
     if link_atual != boletim_link:
         print("-> [Boletim atualizado]\n", boletim_link)
@@ -41,7 +42,7 @@ def ms():
         play_sound(path)
         return True
 
-    return False 
+    return False
 
 
 def monitor():
