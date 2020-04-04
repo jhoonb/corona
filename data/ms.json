@@ -309,5 +309,14 @@
         "descartado": 533, 
         "excluido": 12,
         "obito": 1
+    },
+    "04-04-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/04/Boletim-Epidemiol%C3%B3gico-COVID-19-2020.04.04.pdf",
+        "notificado": 667,
+        "suspeito": 41, 
+        "confirmado": 62,
+        "descartado": 552, 
+        "excluido": 12,
+        "obito": 1
     }
 }
