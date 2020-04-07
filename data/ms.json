@@ -318,5 +318,32 @@
         "descartado": 552, 
         "excluido": 12,
         "obito": 1
+    },
+    "05-04-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/04/Boletim-Epidemiolo_gico-COVID-19-2020.04.05.pdf.pdf",
+        "notificado": 698,
+        "suspeito": 55, 
+        "confirmado": 65,
+        "descartado": 566, 
+        "excluido": 12,
+        "obito": 1
+    },
+    "06-04-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/04/Boletim-Epidemiol%C3%B3gico-COVID-19-2020.04.06-1.pdf",
+        "notificado": 726,
+        "suspeito": 63, 
+        "confirmado": 66,
+        "descartado": 585, 
+        "excluido": 12,
+        "obito": 1
+    },
+    "07-04-2020": {
+        "url": "https://www.vs.saude.ms.gov.br/wp-content/uploads/2020/04/Boletim-Epidemiolo_gico-COVID-19-2020.04.07.pdf.pdf.pdf.pdf",
+        "notificado": 753,
+        "suspeito": 26, 
+        "confirmado": 80,
+        "descartado": 635, 
+        "excluido": 12,
+        "obito": 2
     }
 }
