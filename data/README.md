@@ -4,7 +4,7 @@ Dados do Estado do Mato Grosso do Sul
 Arquivo contendo os dados monitorados pela Secretaria de Estado de Saúde 
 do Mato Grosso do Sul
 
-Gráfico atualizado até dia: 04-04-2020 (formato .PNG)
+Gráfico atualizado até dia: 07-04-2020 (formato .PNG)
 ===
 
 [claro]
