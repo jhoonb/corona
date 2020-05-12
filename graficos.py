@@ -19,7 +19,7 @@ def ms_line(y: dict, ms: dict, filename: str,
     if not y:
         y = {
             'Notificados': 'notificado',
-            'Suspeitos': 'suspeito',
+            'Em Investigação': 'investigacao',
             'Confirmados': 'confirmado',
             'Descartados': 'descartado',
             'Excluídos': 'excluido',
@@ -70,7 +70,7 @@ def ms_bar(ms: dict = None, output: str = "html",
     graf.title = 'COVID-19 | Mato Grosso do Sul\n Fonte: jhoonb.github.io/corona'
     graf.x_labels = list(ms.keys())[::passo]
     graf.add('Notificados', [ms[i]['notificado'] for i in ms.keys()][::passo])
-    graf.add('Suspeitos', [ms[i]['suspeito'] for i in ms.keys()][::passo])
+    graf.add('Em Investigação', [ms[i]['investigacao'] for i in ms.keys()][::passo])
     graf.add('Confirmados', [ms[i]['confirmado'] for i in ms.keys()][::passo])
     graf.add('Descartados', [ms[i]['descartado'] for i in ms.keys()][::passo])
     graf.add('Excluídos', [ms[i]['excluido'] for i in ms.keys()][::passo])
@@ -86,42 +86,64 @@ def ms_bar(ms: dict = None, output: str = "html",
 
 
 if __name__ == '__main__':
-    import corona
-    c = corona.Corona()
-    c.load_ms()
+    import json
+    with open('data/ms.json') as f:
+        ms = json.loads(f.read())
+
     print('gerando gráficos...')
     dados = {
         'Notificados': 'notificado',
-        'Suspeitos': 'suspeito',
+        'Em Investigação': 'investigacao',
         'Confirmados': 'confirmado',
         'Descartados': 'descartado',
         'Excluídos': 'excluido',
         'Óbitos': 'obito'
     }
-    a, b = ms_line(dados, c.ms, None, output="png", color="black", passo=1)
-    a, b = ms_line(dados, c.ms, None, output="png", color="white", passo=1)
-    a, b = ms_line(dados, c.ms, None, output="svg", color="black", passo=1)
-    a, b = ms_line(dados, c.ms, None, output="svg", color="white", passo=1)
+    print_values = False
+    passo = 7
+    a, b = ms_line(dados, ms, None, output="png", color="black", passo=passo, print_values=print_values)
+    a, b = ms_line(dados, ms, None, output="png", color="white", passo=passo, print_values=print_values)
+    a, b = ms_line(dados, ms, None, output="svg", color="black", passo=passo, print_values=print_values)
+    a, b = ms_line(dados, ms, None, output="svg", color="white", passo=passo, print_values=print_values)
 
     # confirmados
     dados = {'Confirmados': 'confirmado'}
     print_values = True
-    passo = 1
+    passo = 7
     a, b = ms_line(
-        dados, c.ms, filename="line_ms_confirmado_escuro", output="png",
+        dados, ms, filename="line_ms_confirmado_escuro", output="png",
         color="black", passo=passo, print_values=print_values)
 
     a, b = ms_line(
-        dados, c.ms, filename="line_ms_confirmado_claro", output="png",
+        dados, ms, filename="line_ms_confirmado_claro", output="png",
         color="white", passo=passo, print_values=print_values)
 
     a, b = ms_line(
-        dados, c.ms, filename="line_ms_confirmado_escuro", output="svg",
+        dados, ms, filename="line_ms_confirmado_escuro", output="svg",
         color="black", passo=passo, print_values=print_values)
 
     a, b = ms_line(
-        dados, c.ms, filename="line_ms_confirmado_claro", output="svg",
+        dados, ms, filename="line_ms_confirmado_claro", output="svg",
         color="white", passo=passo, print_values=print_values)
 
+    # obito
+    dados = {'Óbito': 'obito'}
+    print_values = True
+    passo = 7
+    a, b = ms_line(
+        dados, ms, filename="line_ms_obito_escuro", output="png",
+        color="black", passo=passo, print_values=print_values)
+
+    a, b = ms_line(
+        dados, ms, filename="line_ms_obito_claro", output="png",
+        color="white", passo=passo, print_values=print_values)
+
+    a, b = ms_line(
+        dados, ms, filename="line_ms_obito_escuro", output="svg",
+        color="black", passo=passo, print_values=print_values)
+
+    a, b = ms_line(
+        dados, ms, filename="line_ms_obito_claro", output="svg",
+        color="white", passo=passo, print_values=print_values)
     # [TODO] grafico de barra
     print('ok')

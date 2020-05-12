@@ -286,7 +286,7 @@ class Corona:
         # grafico
         dados = {
             'Notificados': 'notificado',
-            'Suspeitos': 'suspeito',
+            'Em Investigação': 'investigacao',
             'Confirmados': 'confirmado',
             'Descartados': 'descartado',
             'Excluídos': 'excluido',
@@ -313,7 +313,7 @@ class Corona:
             self.brazil_recovered_rate,
             # ms
             ms['notificado'],
-            ms['suspeito'],
+            ms['investigacao'],
             ms['confirmado'],
             ms['descartado'],
             ms['excluido'],
@@ -346,7 +346,7 @@ class Corona:
             f"\n - {CR['green']}{'RECUPERADOS:':.<15}{self.world_recovered:.>15}{CR['reset']}",
             f"\n - {CR['red']}{'TAXA DE LETALIDADE:':.<10}{self.world_death_rate:.>10}%{CR['reset']}",
             f"\n - {CR['green']}{'TAXA DE RECUPERADOS:':.<10}{self.world_recovered_rate:.>9}%{CR['reset']}",
-            f"\n\n {'NÚMEROS NO BRASIL (Bing)':^40}",
+            f"\n\n {'NÚMEROS NO BRASIL':^33}",
             f"\n - {'CASOS:':.<15}{self.brazil_cases:.>15}",
             f"\n - {CR['red']}{'MORTES:':.<15}{self.brazil_deaths:.>15}{CR['reset']}",
             f"\n - {CR['green']}{'RECUPERADOS:':.<15}{self.brazil_recovered:.>15}{CR['reset']}",
